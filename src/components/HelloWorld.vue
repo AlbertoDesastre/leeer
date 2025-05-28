@@ -8,6 +8,8 @@
       <code>components/HelloWorld.vue</code> to test HMR
     </p>
   </div>
+
+  <NForm></NForm>
 </template>
 
 <script setup lang="ts">
