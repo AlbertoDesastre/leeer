@@ -2,6 +2,11 @@
   <section class="home-page">
     <TopHeader />
 
+    <div class="home-banner-wrapper">
+      <h1>¡Bienvenido de vuelta!</h1>
+      <img class="home-banner" src="../../../imgs/gato-encima-de-libros.png" />
+    </div>
+
     <section class="creations-display">
       <h2>Continúa escribiendo...</h2>
       <ul class="creations-list">
@@ -70,6 +75,25 @@ import CreationCard from "../../components/CreationCard.vue";
 </script>
 
 <style scoped>
+.home-banner-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 80%;
+  margin: auto;
+}
+
+.home-banner-wrapper h1 {
+  text-align: center;
+  font-size: 3rem;
+  margin-right: 20px;
+}
+
+.home-banner {
+  margin-top: 20px;
+  width: 500px;
+}
+
 .creations-display {
   margin: 20px 25px;
 }
