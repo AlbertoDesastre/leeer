@@ -1,9 +1,10 @@
 <template>
-  <HelloWorld msg="Vite + Vue" />
+  <!--   <HelloWorld msg="Vite + Vue" /> -->
+  <HomePage></HomePage>
 </template>
 
 <script setup lang="ts">
-import HelloWorld from "./components/HelloWorld.vue";
+import HomePage from "./modules/home/HomePage.vue";
 </script>
 
 <style scoped></style>
