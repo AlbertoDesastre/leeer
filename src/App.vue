@@ -7,7 +7,8 @@
   <CollaborationPetitionPopup nickname="@VictorFrankl" />
   <CollaborationPetitionPopup nickname="Holaa" /> -->
 
-  <CreationPage />
+  <!--   <CreationPage /> -->
+  <CreationSearcher />
 </template>
 
 <script setup lang="ts">
@@ -16,6 +17,7 @@ import RegisterForm from "./modules/auth/LoginForm.vue";
 import HomePage from "./modules/home/HomePage.vue";
 import CollaborationPetitionPopup from "./modules/creations/collaborations/CollaborationPetitionPopup.vue";
 import CreationPage from "./modules/creations/CreationPage.vue";
+import CreationSearcher from "./modules/creations/CreationSearcher.vue";
 </script>
 
 <style scoped>
