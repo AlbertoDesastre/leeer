@@ -3,7 +3,8 @@
   <!-- <HomePage></HomePage> -->
   <!-- <LoginForm /> -->
   <!-- <RegisterForm /> -->
-  <CollaborationPetitionPopup />
+  <CollaborationPetitionPopup nickname="@VictorFrankl" />
+  <CollaborationPetitionPopup nickname="Holaa" />
 </template>
 
 <script setup lang="ts">

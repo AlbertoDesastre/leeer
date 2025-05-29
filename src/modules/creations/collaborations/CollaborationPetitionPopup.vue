@@ -1,5 +1,6 @@
 <template>
-  <n-card class="collaboration-popup" title="Solicitud de colaboración">
+  <!-- Los usuarios que quieran colaborar ven esto-->
+  <n-card v-if="!isAuthor" class="collaboration-popup sending" title="Solicitud de colaboración">
     <!--     <template #header-extra> #header-extra </template> -->
     <!-- Preview con información de la Creación y el Autor -->
     <section class="collab-preview">
@@ -32,11 +33,47 @@
       </n-space>
     </template>
   </n-card>
+
+  <!-- Los autores ven esto cuando les llegan las peticiones -->
+  <n-card v-else class="collaboration-popup sending" title="Solicitud de colaboración">
+    <!--     <template #header-extra> #header-extra </template> -->
+    <!-- Preview con información de la Creación y el Autor -->
+    <section class="collab-preview">
+      <img width="180px" height="180px" src="../../../../imgs/hombre-busca-sentido.webp" />
+      <article>
+        <h3>¡Alguien quiere apoyar tu proyecto!</h3>
+        <p>
+          <strong>En busca de sentido</strong> ha captado el interés de
+          <router-link>@UsuarioRandom</router-link>
+        </p>
+      </article>
+    </section>
+
+    <!-- Radio Buttons -->
+    <template #footer>
+      <n-space justify="center" align="center">
+        <p>
+          <strong>@UsuarioRandom</strong> quiere escribir un
+          <n-button strong secondary type="info"> Fanfiction </n-button>
+        </p>
+      </n-space>
+    </template>
+
+    <template #action>
+      <n-space class="options" justify="space-between" align="center">
+        <button class="close-button">Cerrar</button>
+        <n-button color="#5d81a3"> Aceptar la solicitud </n-button>
+      </n-space>
+    </template>
+  </n-card>
 </template>
 
 <script setup lang="ts">
 import { NCard, NRadioGroup, NRadioButton, NSpace, NButton } from "naive-ui";
-import { ref } from "vue";
+import { ref, computed } from "vue";
+
+const props = defineProps<{ nickname: string }>();
+const author = "@VictorFrankl";
 
 const collaborations = [
   { value: "Fanfiction", label: "Fanfiction" },
@@ -45,6 +82,8 @@ const collaborations = [
 ];
 /*  Este será el valor actual del radio button. Solo se puede elegir uno a la vez, obviamente */
 const value = ref(null);
+
+const isAuthor = computed(() => props.nickname === author);
 </script>
 
 <style scoped>
