@@ -1,6 +1,7 @@
 <template>
   <n-card class="collaboration-popup" title="Solicitud de colaboración">
     <!--     <template #header-extra> #header-extra </template> -->
+    <!-- Preview con información de la Creación y el Autor -->
     <section class="collab-preview">
       <img width="180px" height="180px" src="../../../../imgs/hombre-busca-sentido.webp" />
       <article>
@@ -9,13 +10,35 @@
       </article>
     </section>
 
-    <template #footer> #footer </template>
+    <template #footer>
+      <!-- Radio Buttons -->
+      <n-space justify="center" align="center">
+        <h4>¿Qué tipo de historia te interesa incluir ?</h4>
+        <n-radio-group v-model:value="value" name="radiobuttongroup1">
+          <n-radio-button
+            v-for="collaboration in collaborations"
+            :key="collaboration.value"
+            :value="collaboration.value"
+            :label="collaboration.label"
+          />
+        </n-radio-group>
+      </n-space>
+    </template>
     <template #action> #action </template>
   </n-card>
 </template>
 
 <script setup lang="ts">
-import { NCard } from "naive-ui";
+import { NCard, NRadioGroup, NRadioButton, NSpace } from "naive-ui";
+import { ref } from "vue";
+
+const collaborations = [
+  { value: "Fanfiction", label: "Fanfiction" },
+  { value: "Canon", label: "Canon" },
+  { value: "Spinoff", label: "Spinoff" },
+];
+/*  Este será el valor actual del radio button. Solo se puede elegir uno a la vez, obviamente */
+const value = ref(null);
 </script>
 
 <style scoped>
