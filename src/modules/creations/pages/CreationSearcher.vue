@@ -18,7 +18,7 @@
 </template>
 
 <script setup lang="ts">
-import TopHeader from "../../components/TopHeader.vue";
+import TopHeader from "../../../components/TopHeader.vue";
 import { ref } from "vue";
 
 const creations = ref([

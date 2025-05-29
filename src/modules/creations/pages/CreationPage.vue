@@ -64,7 +64,7 @@
 
 <script setup lang="ts">
 import { NCard, NButton, NSpace, NDataTable } from "naive-ui";
-import TopHeader from "../../components/TopHeader.vue";
+import TopHeader from "../../../components/TopHeader.vue";
 
 const columns = [
   {
