@@ -1,31 +1,41 @@
 <template>
   <TopHeader />
-  <!-- Información de la Creation y colaboradores -->
-  <section class="creation-overview">
-    <n-card title="Hombre busca sentido">
-      <template #footer> </template>
-      <template #action> </template>
-    </n-card>
-  </section>
-  <!-- Descripción de la obra -->
-  <section class="description-container">
-    <p>
-      Este es el estremecedor relato en el que Viktor Frankl nos narra su experiencia en los campos de
-      concentración. Durante todos esos años de sufrimiento, sintió en su propio ser lo que significaba
-      una existencia desnuda, absolutamente desprovista de todo, salvo de la existencia misma. El, que
-      todo lo había perdido, que padeció hambre, frío y brutalidades, que tantas veces estuvo a punto de
-      ser ejecutado, pudo reconocer que, pese a todo, la vida es digna de ser vivida y que la libertad
-      interior y la dignidad humana son indestructibles. En su condición de psiquiatra y prisionero,
-      Frankl reflexiona con palabras de sorprendente esperanza sobre la capacidad humana de trascender
-      las dificultades y descubrir una verdad profunda que nos orienta y da sentido a nuestras vidas.
-    </p>
-  </section>
+  <section class="creation-page">
+    <section class="creation-details">
+      <n-card title="Hombre busca sentido">
+        <template #cover>
+          <route-link to="/creation/1">
+            <img src="../../../imgs/hombre-busca-sentido.webp" />
+          </route-link>
+        </template>
+        <p><strong>Por</strong> <router-link to="/author/1">Autor 1</router-link></p>
 
-  <!-- Todas las partes -->
-  <section class="parts-container">
-    <n-space vertical :size="12">
-      <n-data-table size="large" :columns="columns" :data="data" :pagination="pagination" />
-    </n-space>
+        <template #footer> </template>
+        <template #action> </template>
+      </n-card>
+    </section>
+
+    <div class="description-and-parts-wrapper">
+      <section class="description-container">
+        <p>
+          Este es el estremecedor relato en el que Viktor Frankl nos narra su experiencia en los campos
+          de concentración. Durante todos esos años de sufrimiento, sintió en su propio ser lo que
+          significaba una existencia desnuda, absolutamente desprovista de todo, salvo de la existencia
+          misma. El, que todo lo había perdido, que padeció hambre, frío y brutalidades, que tantas veces
+          estuvo a punto de ser ejecutado, pudo reconocer que, pese a todo, la vida es digna de ser
+          vivida y que la libertad interior y la dignidad humana son indestructibles. En su condición de
+          psiquiatra y prisionero, Frankl reflexiona con palabras de sorprendente esperanza sobre la
+          capacidad humana de trascender las dificultades y descubrir una verdad profunda que nos orienta
+          y da sentido a nuestras vidas.
+        </p>
+      </section>
+
+      <section class="parts-container">
+        <n-space vertical :size="12">
+          <n-data-table size="large" :columns="columns" :data="data" :pagination="pagination" />
+        </n-space>
+      </section>
+    </div>
   </section>
 </template>
 
@@ -96,4 +106,26 @@ const data = [
 const pagination = { pageSize: 50 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.creation-page {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 32px;
+  margin: 32px;
+  min-height: 600px;
+}
+.description-and-parts-wrapper {
+  display: grid;
+  grid-template-rows: 250px 1fr;
+  height: 100%;
+}
+.description-container {
+  overflow: auto;
+  height: 100%;
+  max-height: 100%;
+}
+.parts-container {
+  height: 100%;
+  overflow: auto;
+}
+</style>
