@@ -10,11 +10,11 @@
       </article>
     </section>
 
+    <!-- Radio Buttons -->
     <template #footer>
-      <!-- Radio Buttons -->
       <n-space justify="center" align="center">
         <h4>¿Qué tipo de historia te interesa incluir ?</h4>
-        <n-radio-group v-model:value="value" name="radiobuttongroup1">
+        <n-radio-group v-model:value="value" name="collaboration-options">
           <n-radio-button
             v-for="collaboration in collaborations"
             :key="collaboration.value"
@@ -24,12 +24,18 @@
         </n-radio-group>
       </n-space>
     </template>
-    <template #action> #action </template>
+
+    <template #action>
+      <n-space class="options" justify="space-between" align="center">
+        <n-button text> Cerrar </n-button>
+        <n-button color="#5d81a3"> Enviar solicitud </n-button>
+      </n-space>
+    </template>
   </n-card>
 </template>
 
 <script setup lang="ts">
-import { NCard, NRadioGroup, NRadioButton, NSpace } from "naive-ui";
+import { NCard, NRadioGroup, NRadioButton, NSpace, NButton } from "naive-ui";
 import { ref } from "vue";
 
 const collaborations = [
