@@ -27,7 +27,7 @@
         />
       </n-form-item>
       <!-- Submit -->
-      <n-button type="primary" block @click="handleSubmit">Registrarse</n-button>
+      <n-button type="primary" block @click="handleSubmit">Iniciar sesión</n-button>
     </n-form>
     <!-- Banner con imagen + texto -->
     <section class="form-banner-container">
