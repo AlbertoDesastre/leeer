@@ -7,7 +7,7 @@
       <img width="180px" height="180px" src="../../../../imgs/hombre-busca-sentido.webp" />
       <article>
         <h3>Estás a punto de pedir una colaboración para:</h3>
-        <p><strong>En buscado de sentido</strong>, de <router-link>@VictorFrankl</router-link></p>
+        <p><strong>En buscado de sentido</strong>, de <router-link to="">@VictorFrankl</router-link></p>
       </article>
     </section>
 
@@ -44,7 +44,7 @@
         <h3>¡Alguien quiere apoyar tu proyecto!</h3>
         <p>
           <strong>En busca de sentido</strong> ha captado el interés de
-          <router-link>@UsuarioRandom</router-link>
+          <router-link to="">@UsuarioRandom</router-link>
         </p>
       </article>
     </section>
