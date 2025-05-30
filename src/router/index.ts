@@ -17,7 +17,7 @@ export const router = createRouter({
           path: "/creations",
           name: "creations",
           /* Estos imports lo que hacen es cargar en memoria el componente SOLO cuando se visite su página, por eso lo pongo todo el rato */
-          component: () => import("../modules/creations/creationsView.vue"),
+          component: () => import("../modules/creations/CreationsView.vue"),
         },
       ],
     },

@@ -1,8 +1,8 @@
 <template>
   <section class="creations-display">
-    <ul class="creations-list">
-      <li v-for="index in 5" class="creation-item">
-        <CreationCard />
+    <ul v-if="props.creations" class="creations-list">
+      <li v-for="creation in props.creations" class="creation-item">
+        <CreationCard :creation="creation" />
       </li>
     </ul>
   </section>
@@ -10,6 +10,9 @@
 
 <script setup lang="ts">
 import CreationCard from "../../common/components/CreationCard.vue";
+import type { Creation } from "../types";
+
+const props = defineProps<{ creations: Creation[] }>();
 </script>
 
 <style scoped>

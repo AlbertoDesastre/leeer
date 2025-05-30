@@ -1,19 +1,36 @@
 <template>
   <div class="creation-card">
-    <span>¡Colaborativo!</span>
-    <n-card title="Hombre busca sentido">
+    <span v-if="!props.creation.is_draft">¡Colaborativo!</span>
+    <n-card :title="props.creation.title">
       <template #cover>
-        <route-link to="/creation/1">
-          <img src="../../../../imgs/hombre-busca-sentido.webp" />
-        </route-link>
+        <RouterLink :to="{ name: 'creations' }">
+          <img
+            :src="props.creation.thumbnail ? props.creation.thumbnail : fallback_thumbnail"
+            :alt="props.creation.title"
+          />
+        </RouterLink>
       </template>
-      <p><strong>Por</strong> <router-link to="/author/1">Autor 1</router-link></p>
+      <p class="author">
+        Por
+        <RouterLink :to="{ name: 'home' }">
+          <strong>@{{ props.creation.user?.nickname }}</strong></RouterLink
+        >
+      </p>
+      <p class="synopsis">{{ props.creation.synopsis }}</p>
+      <p class="date">
+        <i>Creado el {{ new Date(props.creation.creation_date).toLocaleDateString() }} </i>
+      </p>
     </n-card>
   </div>
 </template>
 
 <script setup lang="ts">
 import { NCard } from "naive-ui";
+import { RouterLink } from "vue-router";
+import type { Creation } from "../../creations/types";
+import fallback_thumbnail from "../../../../imgs/fallback_thumbnail.png";
+
+const props = defineProps<{ creation: Creation }>();
 </script>
 
 <style scoped>
@@ -36,5 +53,18 @@ import { NCard } from "naive-ui";
 
 .creation-card .n-card img {
   display: block;
+}
+.author {
+  margin-top: -10px;
+}
+
+.synopsis {
+  margin-top: 5px;
+}
+
+.date {
+  margin-top: 5px;
+  font-size: 13px;
+  text-align: right;
 }
 </style>

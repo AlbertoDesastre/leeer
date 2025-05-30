@@ -6,15 +6,22 @@
     </div>
 
     <h2>¡Últimas novedades!</h2>
-    <CreationsDisplay />
+    <CreationsDisplay v-if="creations" :creations="creations" />
 
-    <h2>Lo último de: @Autor</h2>
-    <CreationsDisplay />
+    <h2>Lo último de: @{{ authorNickname }}</h2>
+    <CreationsDisplay v-if="maryShelleyCreations" :creations="maryShelleyCreations" />
   </section>
 </template>
 
 <script setup lang="ts">
 import CreationsDisplay from "../../creations/components/CreationsDisplay.vue";
+import { useCreations } from "../../creations/composables/useCreations";
+
+const { getCreations } = useCreations();
+const authorNickname = "MaryShelley";
+const creations = await getCreations({ limit: 10, offset: 0 });
+/* Hago una segunda llamada porque puede que en la lista de creations no vengan muchas obras de la autora, así que le dedico una */
+const maryShelleyCreations = await getCreations({ authorNickname, limit: 10, offset: 0 });
 </script>
 
 <style scoped>
