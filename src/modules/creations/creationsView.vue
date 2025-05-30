@@ -1,5 +1,7 @@
 <template>
-  <router-view />
+  <CreationPage />
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import CreationPage from "./pages/CreationPage.vue";
+</script>

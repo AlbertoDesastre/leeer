@@ -47,8 +47,8 @@
 import { NForm, NFormItem, NInput, NButton, NAvatar } from "naive-ui";
 import type { FormInst, FormRules } from "naive-ui";
 import { ref } from "vue";
-import fallback_icon from "../../../imgs/gato-detective.png";
-import personas_escribiendo from "../../../imgs/personas-escribiendo.png";
+import fallback_icon from "../../../../imgs/gato-detective.png";
+import personas_escribiendo from "../../../../imgs/personas-escribiendo.png";
 
 const formRef = ref<FormInst | null>(null);
 // Estos son los valores del formulario, que inicializo por defecto

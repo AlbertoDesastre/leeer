@@ -2,25 +2,25 @@
   <section class="header-wrapper">
     <header>
       <div>
-        <router-link to="/login">Iniciar sesión</router-link>
-        <router-link to="/register">Registrarse</router-link>
+        <RouterLink :to="{ name: 'login' }">Iniciar sesión</RouterLink>
+        <RouterLink :to="{ name: 'register' }">Registrarse</RouterLink>
       </div>
     </header>
 
     <nav class="navigation-wrapper">
       <!-- Navegación principal -->
       <div class="main-navigation">
-        <router-link to="/home">Home</router-link>
-        <router-link to="/desk" tabindex="0">Escritorio</router-link>
+        <RouterLink :to="{ name: 'home' }">Home</RouterLink>
+        <RouterLink :to="{ name: 'desk' }" tabindex="0">Escritorio</RouterLink>
         <nav class="dropdown-wrapper">
           <!-- tabindex me permite desplegar el dropdown a conveniencia al hacer click en explorar -->
           <p tabindex="0">Explorar</p>
           <ul>
             <li>
-              <router-link to="/creations">Creaciones</router-link>
+              <RouterLink :to="{ name: 'creations' }">Creaciones</RouterLink>
             </li>
             <li>
-              <router-link to="/authors">Autores</router-link>
+              <RouterLink :to="{ name: '' }"></RouterLink>
             </li>
           </ul>
         </nav>
@@ -29,10 +29,12 @@
       <!-- Buscador y otras opciones -->
       <input type="text" placeholder="Buscar creaciones..." />
 
-      <!--      <div class="user-navigation">
-        <router-link to="/notificaciones">Notificación</router-link>
-        <router-link to="/profile">Contacto</router-link>
-      </div> -->
+      <!--      
+      <div class="user-navigation">
+        <RouterLink to="/notificaciones">Notificación</RouterLink>
+        <RouterLink to="/profile">Contacto</RouterLink>
+      </div> 
+      -->
     </nav>
   </section>
 </template>
@@ -84,14 +86,14 @@
   color: #fff;
 }
 
-.header-wrapper > header router-link,
-.header-wrapper nav router-link,
+.header-wrapper > header a,
+.header-wrapper nav a,
 .header-wrapper nav .main-navigation p {
   cursor: pointer;
 }
 
-.main-navigation router-link:focus,
-.main-navigation router-link:hover,
+.main-navigation a:focus,
+.main-navigation a:hover,
 .main-navigation p:focus,
 .main-navigation p:hover {
   background-color: var(--color-action-blue);
@@ -106,7 +108,7 @@
   margin-left: 8px;
 }
 
-.main-navigation router-link,
+.main-navigation a,
 .main-navigation p {
   width: 130px;
   padding: 30px;
@@ -148,7 +150,7 @@
 .dropdown-wrapper p {
   width: 130px;
 }
-.dropdown-wrapper ul li router-link {
+.dropdown-wrapper ul li a {
   padding: 0px;
 }
 </style>
