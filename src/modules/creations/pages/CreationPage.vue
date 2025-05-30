@@ -17,20 +17,15 @@
           y da sentido a nuestras vidas.
         </p>
       </section>
-      <!-- TABLA CON EL NÚMERO DE PARTES -->
-      <section class="parts-container">
-        <n-space vertical :size="12">
-          <n-data-table size="large" :columns="columns" :data="data" :pagination="pagination" />
-        </n-space>
-      </section>
+      <PartsTable :columns="columns" :data="data" :pagination="pagination" />
     </div>
   </section>
 </template>
 
 <script setup lang="ts">
-import { NSpace, NDataTable } from "naive-ui";
 import TopHeader from "../../../components/TopHeader.vue";
 import CreationDetails from "../components/CreationDetails.vue";
+import PartsTable from "../components/PartsTable.vue";
 
 const columns = [
   {
@@ -118,11 +113,5 @@ const pagination = { pageSize: 10 };
   overflow: auto;
   height: 100%;
   max-height: 100%;
-}
-
-.parts-container {
-  margin-top: 32px;
-  height: 100%;
-  overflow: auto;
 }
 </style>

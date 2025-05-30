@@ -8,7 +8,7 @@
   <!--    <CollaborationPetitionPopup nickname="@VictorFrankl" />  -->
   <!--   <CollaborationPetitionPopup nickname="Holaa" />  -->
 
-  <!--   <CreationPage /> -->
+  <CreationPage />
   <!--   <CreationSearcher /> -->
   <DeskPage />
 </template>
