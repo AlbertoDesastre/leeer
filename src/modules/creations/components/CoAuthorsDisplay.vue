@@ -22,6 +22,7 @@ const props = defineProps<{ images: string[] }>();
   padding-top: 15px;
   margin-bottom: 55px;
 }
+
 .co-authors-display img {
   width: 60px;
   height: 60px;

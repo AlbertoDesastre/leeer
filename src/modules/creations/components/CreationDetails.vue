@@ -12,7 +12,7 @@
         Por <strong><router-link to="/author/1">Autor 1</router-link></strong>
       </p>
       <!-- Colaboradores -->
-      <template #footer>
+      <template v-if="displayCoAuthors" #footer>
         <p>¡Ya han colaborado en esta creación X usuarios!</p>
         <CoAuthorsDisplay :images="coauthorImages" />
       </template>
@@ -32,6 +32,7 @@ import CoAuthorsDisplay from "../components/CoAuthorsDisplay.vue";
 
 const props = defineProps<{
   isAuthor: boolean;
+  displayCoAuthors: boolean;
 }>();
 
 const coauthorImages = [

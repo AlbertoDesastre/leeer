@@ -61,7 +61,7 @@
 }
 
 .header-wrapper nav {
-  background-color: rgb(135, 46, 6);
+  background-color: var(--color-main-brown);
   color: white;
   padding: 0px 10px;
   justify-content: space-between;
@@ -100,7 +100,7 @@
 }
 
 .main-navigation > :focus-within {
-  background-color: #5d81a3;
+  background-color: var(--color-action-blue);
 }
 
 .dropdown-wrapper ul {
@@ -113,7 +113,7 @@
 
 .dropdown-wrapper:focus-within ul {
   display: block;
-  background-color: #5d81a3;
+  background-color: var(--color-action-blue);
 }
 
 .dropdown-wrapper ul li {

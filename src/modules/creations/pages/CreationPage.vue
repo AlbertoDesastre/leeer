@@ -1,7 +1,7 @@
 <template>
   <TopHeader />
   <section class="creation-page">
-    <CreationDetails :is-author="false" />
+    <CreationDetails :is-author="false" :display-co-authors="true" />
     <!-- DESCRIPCIÓN -->
     <div class="description-and-parts-wrapper">
       <section class="description-container">

@@ -89,7 +89,7 @@ const creations = ref([
 
 .creation-info h3 {
   font-weight: bold;
-  color: #5d81a3;
+  color: var(--color-action-blue);
 }
 
 .creation-info h3,
@@ -100,7 +100,7 @@ const creations = ref([
 .creation-user {
   margin-bottom: 8px;
   font-size: 1rem;
-  color: #888;
+  color: var(--color-gray);
 }
 
 .creation-info p:last-child {

@@ -114,6 +114,6 @@ const isAuthor = computed(() => props.nickname === author);
 }
 
 .close-button:hover {
-  color: darkgray;
+  color: var(--color-gray);
 }
 </style>
