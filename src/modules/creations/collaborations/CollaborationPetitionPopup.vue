@@ -104,16 +104,4 @@ const isAuthor = computed(() => props.nickname === author);
 .collab-preview h3 {
   margin-bottom: 20px;
 }
-
-.close-button {
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
-  letter-spacing: 0.2px; /* Me he fijado en el NButton y parece que tiene un letter-spacing similar. ¿Alguien notará la diferencia entre 0.2px y 0? Desde luego que no, pero yo sí. */
-  transition: ease 250ms;
-}
-
-.close-button:hover {
-  color: var(--color-gray);
-}
 </style>
