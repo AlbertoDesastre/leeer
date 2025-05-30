@@ -1,5 +1,7 @@
 <template>
   <TopHeader />
+  <h2><i>ESCRITORIO</i></h2>
+  <h3>Edita, crea y publica tus historias aquí.</h3>
   <section class="creations-overview">
     <!-- LISTA/SELECCION DE CREACIONES -->
     <ul class="creations-list">
@@ -111,6 +113,17 @@ const pagination = { pageSize: 10 };
 </script>
 
 <style lang="css" scoped>
+h3,
+h2 {
+  font-size: 3rem;
+  text-align: center;
+}
+
+h3 {
+  font-size: 1.5rem;
+  color: rgb(41, 41, 41);
+}
+
 .creations-overview {
   display: flex;
   gap: 35px;
@@ -122,6 +135,7 @@ const pagination = { pageSize: 10 };
   max-height: 700px;
   min-width: 380px;
   margin-top: 95px;
+  padding-top: 20px;
   overflow: auto;
   overflow-x: hidden;
   position: relative;
