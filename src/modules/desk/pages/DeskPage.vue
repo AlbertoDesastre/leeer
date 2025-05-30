@@ -1,6 +1,6 @@
 <template>
   <section class="desk-container">
-    <!--   <CreationEdition /> -->
+    <CreationEdition />
   </section>
 </template>
 

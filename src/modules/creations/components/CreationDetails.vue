@@ -17,7 +17,7 @@
         <CoAuthorsDisplay :images="coauthorImages" />
       </template>
       <!-- Botón para colaborar -->
-      <template #action>
+      <template v-if="!isAuthor" #action>
         <n-space justify="center">
           <n-button round color="#5d81a3"> Colaborar en esta historia </n-button>
         </n-space>
@@ -29,6 +29,10 @@
 <script setup lang="ts">
 import { NCard, NButton, NSpace } from "naive-ui";
 import CoAuthorsDisplay from "../components/CoAuthorsDisplay.vue";
+
+const props = defineProps<{
+  isAuthor: boolean;
+}>();
 
 const coauthorImages = [
   "../../../../imgs/gato-escritor.png",

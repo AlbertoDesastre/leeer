@@ -1,7 +1,7 @@
 <template>
   <TopHeader />
   <section class="creation-page">
-    <CreationDetails />
+    <CreationDetails :is-author="false" />
     <!-- DESCRIPCIÓN -->
     <div class="description-and-parts-wrapper">
       <section class="description-container">
