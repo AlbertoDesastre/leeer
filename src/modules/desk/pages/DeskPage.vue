@@ -4,12 +4,14 @@
   </section>
 
   <!-- Probablemente tenga que evitar usar el desk-container para cualquier componente, de momento dejo esta página fuera para maquetarla. -->
-  <CreationsOverwiev />
+  <!-- <CreationsOverview /> -->
+  <PartWritter />
 </template>
 
 <script setup lang="ts">
 import CreationEdition from "./CreationEdition.vue";
-import CreationsOverwiev from "./CreationsOverwiev.vue";
+import CreationsOverview from "./CreationsOverview.vue";
+import PartWritter from "./PartWritter.vue";
 </script>
 
 <style lang="css" scoped>
