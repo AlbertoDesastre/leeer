@@ -70,8 +70,8 @@
 </template>
 
 <script setup lang="ts">
-import TopHeader from "../../components/TopHeader.vue";
-import CreationCard from "../../components/CreationCard.vue";
+import TopHeader from "../../../components/TopHeader.vue";
+import CreationCard from "../../../components/CreationCard.vue";
 </script>
 
 <style scoped>
