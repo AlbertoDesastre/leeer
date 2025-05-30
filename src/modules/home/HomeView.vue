@@ -2,7 +2,7 @@
   <!-- El menú Header solo se renderiza en las rutas hijas de Home. Ver más detalles en router/index.ts -->
   <TopHeader />
 
-  <RouterView />
+  <HomePage />
 </template>
 
 <script setup lang="ts">

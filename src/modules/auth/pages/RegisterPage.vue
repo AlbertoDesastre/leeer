@@ -114,6 +114,7 @@ function handleSubmit() {
   border-radius: 6px;
   box-shadow: 0px 2px 16px 0 rgba(0, 0, 0, 0.15);
 }
+
 .avatar-wrapper {
   display: flex;
   justify-content: center;

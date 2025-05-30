@@ -3,8 +3,6 @@
   <RouterView />
 </template>
 
-<script setup lang="ts">
-import TopHeader from "./modules/common/components/TopHeader.vue";
-</script>
+<script setup lang="ts"></script>
 
 <style scoped></style>
