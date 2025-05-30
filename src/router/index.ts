@@ -7,6 +7,7 @@ export const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   /* Path le asigna la ruta que renderizará el componente a la derecha. El "name" es un nombre que le damos para que se accedan rápidamente a través de un "<RouterLink :to='name'/>" */
   routes: [
+    // Home y otras rutas que necesitan el TopHeader
     {
       path: "/",
       name: "home",
@@ -15,11 +16,12 @@ export const router = createRouter({
         {
           path: "/creations",
           name: "creations",
+          /* Estos imports lo que hacen es cargar en memoria el componente SOLO cuando se visite su página, por eso lo pongo todo el rato */
           component: () => import("../modules/creations/creationsView.vue"),
         },
       ],
     },
-    /* Estos imports lo que hacen es cargar en memoria el componente SOLO cuando se visite su página, por eso lo pongo todo el rato */
+    // Rutas sin TopHeader
     { path: "/login", name: "login", component: () => import("../modules/auth/pages/LoginPage.vue") },
     {
       path: "/register",
@@ -30,6 +32,11 @@ export const router = createRouter({
       path: "/desk",
       name: "desk",
       component: () => import("../modules/desk/DeskView.vue"),
+    },
+    /* Si tira cualquier otra ruta desconocida redirige a Home */
+    {
+      path: "/:pathMatch(.*)*",
+      redirect: "/",
     },
   ],
 });
