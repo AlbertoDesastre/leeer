@@ -3,15 +3,14 @@
   <!-- <HomePage></HomePage> -->
 
   <!-- <RegisterForm /> -->
-  <!--   
-  <CollaborationPetitionPopup nickname="@VictorFrankl" />
-  <CollaborationPetitionPopup nickname="Holaa" /> -->
+  <!--    <LoginForm /> -->
+
+  <!--    <CollaborationPetitionPopup nickname="@VictorFrankl" />  -->
+  <!--   <CollaborationPetitionPopup nickname="Holaa" />  -->
 
   <!--   <CreationPage /> -->
   <!--   <CreationSearcher /> -->
   <DeskPage />
-
-  <LoginForm />
 </template>
 
 <script setup lang="ts">
