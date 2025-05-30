@@ -3,8 +3,8 @@
     <TopHeader />
 
     <div class="home-banner-wrapper">
-      <h1>¡Bienvenido de vuelta!</h1>
-      <img class="home-banner" src="../../../imgs/gato-encima-de-libros.png" />
+      <h1>¡Bienvenido a leeer!</h1>
+      <img class="home-banner" src="../../../../imgs/gato-encima-de-libros.png" />
     </div>
 
     <section class="creations-display">

@@ -1,7 +1,6 @@
 <template>
   <section class="header-wrapper">
     <header>
-      <router-link to="/">leeer</router-link>
       <div>
         <router-link to="/login">Iniciar sesión</router-link>
         <router-link to="/register">Registrarse</router-link>
@@ -11,6 +10,7 @@
     <nav class="navigation-wrapper">
       <!-- Navegación principal -->
       <div class="main-navigation">
+        <router-link to="/home">Home</router-link>
         <router-link to="/desk" tabindex="0">Escritorio</router-link>
         <nav class="dropdown-wrapper">
           <!-- tabindex me permite desplegar el dropdown a conveniencia al hacer click en explorar -->
@@ -29,10 +29,10 @@
       <!-- Buscador y otras opciones -->
       <input type="text" placeholder="Buscar creaciones..." />
 
-      <div class="user-navigation">
+      <!--      <div class="user-navigation">
         <router-link to="/notificaciones">Notificación</router-link>
         <router-link to="/profile">Contacto</router-link>
-      </div>
+      </div> -->
     </nav>
   </section>
 </template>
@@ -50,9 +50,11 @@
 }
 
 .header-wrapper > header {
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
+  font-size: 16px;
   padding: 16px 0 8px 0;
+  margin-right: 10px;
 }
 
 .header-wrapper > header > div {
@@ -69,6 +71,7 @@
 }
 
 .header-wrapper nav input {
+  min-width: 500px;
   margin: 5px 0px;
   padding: 7px;
   border: none;
