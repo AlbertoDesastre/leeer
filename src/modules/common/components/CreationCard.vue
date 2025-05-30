@@ -4,7 +4,7 @@
     <n-card title="Hombre busca sentido">
       <template #cover>
         <route-link to="/creation/1">
-          <img src="../../../imgs/hombre-busca-sentido.webp" />
+          <img src="../../../../imgs/hombre-busca-sentido.webp" />
         </route-link>
       </template>
       <p><strong>Por</strong> <router-link to="/author/1">Autor 1</router-link></p>

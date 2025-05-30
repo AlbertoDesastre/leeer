@@ -84,6 +84,20 @@
   color: #fff;
 }
 
+.header-wrapper > header router-link,
+.header-wrapper nav router-link,
+.header-wrapper nav .main-navigation p {
+  cursor: pointer;
+}
+
+.main-navigation router-link:focus,
+.main-navigation router-link:hover,
+.main-navigation p:focus,
+.main-navigation p:hover {
+  background-color: var(--color-action-blue);
+  color: #fff;
+}
+
 .main-navigation .dropdown-wrapper {
   display: flex;
   flex-direction: column;
