@@ -1,6 +1,9 @@
 <template>
   <section class="login-wrapper">
     <!-- Formulario en si -->
+    <!-- El componente me acepta las rules como objeto y las linkea. El atributo de objeto "password" se linkeará con aquel input que tenga un "path" con el mismo nombre.  -->
+    <!-- ":model" y ":rules" son Props definidas por la gente de Nativeui. En realidad es un binding de Vue (https://vuejs.org/api/built-in-directives.html#v-bind). Al bindear, dentro de la lógica del componente hace checkeos con los atributos del objeto. Lo más seguro es que dentro del componente n-form haga un checkeo con, por ejemplo, "form.nickname" y "rules.nickname" y haga las comprobaciones de las reglas. En caso de que no se cumpla busca a su elemento hijo "n-item" y despliega el error allí <3 -->
+
     <n-form
       ref="formRef"
       :model="form"
@@ -28,6 +31,7 @@
       </n-form-item>
       <!-- Submit -->
       <n-button type="primary" block @click="handleSubmit">Iniciar sesión</n-button>
+      <RouterLink :to="{ name: 'register' }" class="close-button">¿Quieres registrarte?</RouterLink>
     </n-form>
     <!-- Banner con imagen + texto -->
     <section class="form-banner-container">
@@ -38,8 +42,6 @@
       </article>
     </section>
   </section>
-  <!-- El componente me acepta las rules como objeto y las linkea. El atributo de objeto "password" se linkeará con aquel input que tenga un "path" con el mismo nombre.  -->
-  <!-- ":model" y ":rules" son Props definidas por la gente de Nativeui. En realidad es un binding de Vue (https://vuejs.org/api/built-in-directives.html#v-bind). Al bindear, dentro de la lógica del componente hace checkeos con los atributos del objeto. Lo más seguro es que dentro del componente n-form haga un checkeo con, por ejemplo, "form.nickname" y "rules.nickname" y haga las comprobaciones de las reglas. En caso de que no se cumpla busca a su elemento hijo "n-item" y despliega el error allí <3 -->
 </template>
 
 <script setup lang="ts">
@@ -81,10 +83,11 @@ function handleSubmit() {
 
 <style scoped>
 .login-wrapper {
+  position: relative;
   display: flex;
   justify-content: center;
+  margin-top: 9rem;
   max-height: 400px;
-  position: relative;
 }
 
 .login-form,
@@ -94,7 +97,7 @@ function handleSubmit() {
 
 .login-form {
   max-width: 350px;
-  padding: 30px 20px 20px 20px;
+  padding: 30px 20px 15px 20px;
   background: #fff;
   border-radius: 6px 0px 0px 6px;
 }
@@ -139,5 +142,21 @@ function handleSubmit() {
 
 .form-banner-container article p {
   font-size: 16px;
+}
+
+.close-button {
+  display: block;
+  margin-left: auto;
+  margin-top: 10px;
+  color: gray;
+  font-size: 14px;
+  cursor: pointer;
+  width: fit-content;
+  padding: 4px;
+  transition: all 200ms;
+}
+
+.close-button:hover {
+  color: var(--color-action-blue);
 }
 </style>

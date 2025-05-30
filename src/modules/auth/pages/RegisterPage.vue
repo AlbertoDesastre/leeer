@@ -47,6 +47,7 @@
     </n-form-item>
     <!-- Submit -->
     <n-button type="primary" block @click="handleSubmit">Registrarse</n-button>
+    <RouterLink :to="{ name: 'login' }" class="close-button">¿Ya tienes una cuenta?</RouterLink>
   </n-form>
 </template>
 
@@ -107,8 +108,8 @@ function handleSubmit() {
 <style scoped>
 .login-form {
   max-width: 350px;
-  margin: 0 auto;
-  padding: 30px 20px 20px 20px;
+  margin: 7rem auto;
+  padding: 30px 20px 15px 20px;
   background: #fff;
   border-radius: 6px;
   box-shadow: 0px 2px 16px 0 rgba(0, 0, 0, 0.15);
@@ -117,5 +118,21 @@ function handleSubmit() {
   display: flex;
   justify-content: center;
   margin-bottom: 20px;
+}
+
+.close-button {
+  display: block;
+  margin-left: auto;
+  margin-top: 10px;
+  color: gray;
+  font-size: 14px;
+  cursor: pointer;
+  width: fit-content;
+  padding: 4px;
+  transition: all 200ms;
+}
+
+.close-button:hover {
+  color: var(--color-action-blue);
 }
 </style>
