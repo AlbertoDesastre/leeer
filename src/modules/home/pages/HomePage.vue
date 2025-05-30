@@ -1,7 +1,5 @@
 <template>
   <section class="home-page">
-    <TopHeader />
-
     <div class="home-banner-wrapper">
       <h1>¡Bienvenido a leeer!</h1>
       <img class="home-banner" src="../../../../imgs/gato-encima-de-libros.png" />

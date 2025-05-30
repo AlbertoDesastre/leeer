@@ -1,5 +1,4 @@
 <template>
-  <TopHeader />
   <h2><i>ESCRITORIO</i></h2>
   <h3>Edita, crea y publica tus historias aquí.</h3>
   <section class="creations-overview">
@@ -33,7 +32,6 @@ import { ref } from "vue";
 import CoAuthorsDisplay from "../../creations/components/CoAuthorsDisplay.vue";
 import CreationDetails from "../../creations/components/CreationDetails.vue";
 import PartsTable from "../../creations/components/PartsTable.vue";
-import TopHeader from "../../../components/TopHeader.vue";
 
 const selectedIndex = ref(0);
 

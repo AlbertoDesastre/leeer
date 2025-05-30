@@ -1,5 +1,4 @@
 <template>
-  <TopHeader />
   <section class="creation-page">
     <CreationDetails :is-author="false" :display-co-authors="true" />
     <!-- DESCRIPCIÓN -->
@@ -23,7 +22,6 @@
 </template>
 
 <script setup lang="ts">
-import TopHeader from "../../../components/TopHeader.vue";
 import CreationDetails from "../components/CreationDetails.vue";
 import PartsTable from "../components/PartsTable.vue";
 

@@ -1,7 +1,5 @@
 <template>
   <section class="creation-searcher-page">
-    <TopHeader />
-
     <ul class="creations-list">
       <li v-for="creation in creations" :key="creation.id" class="creation-item">
         <img :src="creation.img" alt="Imagen de la creación" />
@@ -18,7 +16,6 @@
 </template>
 
 <script setup lang="ts">
-import TopHeader from "../../../components/TopHeader.vue";
 import { ref } from "vue";
 
 const creations = ref([
