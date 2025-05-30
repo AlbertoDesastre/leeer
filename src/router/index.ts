@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../modules/home/HomeView.vue";
 
+/* Configuración de las rutas */
 export const router = createRouter({
   /* Esto me toma la raiz del proyecto, es decir, el puerto que la corra + "/" */
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -25,3 +26,16 @@ export const router = createRouter({
     },
   ],
 });
+
+/* Guard para cuando no estás */
+router.beforeEach((to, _from, next) => {
+  /* La manera de leer esto es "cuando el usuario es "cuando el usuario vaya hacia 'desk' y no tenga esta propiedad lo redirijo a otro sitio" */
+  if (to.name === "desk" && to.query.isLogged !== "true") {
+    // Si no está logeado, redirige a login
+    return next({ name: "login" });
+  }
+  /* Si se verifica el estado de loggin entonces le deja pasar a donde quería ir, en este caso, a desk. */
+  next();
+});
+
+export default router;
