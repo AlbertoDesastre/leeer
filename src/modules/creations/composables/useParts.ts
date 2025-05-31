@@ -26,7 +26,7 @@ export const useParts = () => {
         type = ["ORIGINAL"];
       } else {
         // recorre el array de strings, los pone a mayúsculas
-        type = part.collaborationType.map((type) => type.charAt(0).toUpperCase() + type.slice(1));
+        type = part.collaborationType.map((type) => type.toUpperCase() + " ");
       }
 
       return {
