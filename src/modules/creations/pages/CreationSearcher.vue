@@ -21,7 +21,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 import TopHeader from "../../common/components/TopHeader.vue";
 import fallback_thumbnail from "../../../../imgs/fallback_thumbnail.png";
 import { useRoute } from "vue-router";
@@ -32,7 +32,8 @@ const { getCreationsByTerm } = useCreations();
 const route = useRoute();
 const creations = ref<Creation[]>();
 
-onMounted(async () => {
+/* Paso y me creo un método propio para volver a utilizar la búsqueda cuando venga de otra página y se monte por primera vez el componente (onMounted) y luego cada vez que cambie el parámetro de búsqueda si el usuario busca otra vez desde CreationSearcher */
+const fetchCreations = async () => {
   const search = route.query.search;
 
   creations.value = (await getCreationsByTerm({
@@ -40,10 +41,11 @@ onMounted(async () => {
     limit: 15,
     offset: 0,
   })) as Creation[];
+};
 
-  console.log("Término de búsqueda recibido:", creations.value);
-  // Aquí puedes usar searchTerm para filtrar o buscar creaciones
-});
+onMounted(fetchCreations);
+// Si hay algún cambio en la ruta se ejecuta el callback de la derecha.
+watch(() => route.query.search, fetchCreations);
 </script>
 
 <style scoped>
