@@ -8,17 +8,19 @@
         </RouterLink>
       </template>
       <h2>
-        <RouterLink :to="{ name: 'creation-details', params: { id: props.creation.creation_id } }">
+        <RouterLink :to="{ name: 'creation-details', query: { search: props.creation.creation_id } }">
           {{ props.creation.title }}
         </RouterLink>
       </h2>
       <p>
         Por
-        <strong
-          ><RouterLink :to="{ name: 'authors', params: { id: props.creation.user?.user_id } }">{{
-            props.creation.user?.nickname
-          }}</RouterLink></strong
-        >
+        <strong>
+          <RouterLink
+            :to="{ name: 'creations-search', query: { search: props.creation.user?.nickname } }"
+          >
+            {{ props.creation.user?.nickname }}
+          </RouterLink>
+        </strong>
       </p>
       <p class="synopsis">{{ props.creation.synopsis }}</p>
       <p class="date">Creado: {{ new Date(props.creation.creation_date).toLocaleDateString() }}</p>

@@ -11,7 +11,7 @@
         :class="['creation-details', { active: selectedIndex === index - 1 }]"
         @click="selectedIndex = index - 1"
       >
-        <CreationDetails :is-author="true" :display-co-authors="false" />
+        <!--  <CreationDetails  :creation="" :is-author="true" :display-co-authors="false" /> -->
       </li>
     </ul>
 
@@ -65,6 +65,7 @@ const columns = [
     key: "date",
   },
 ];
+
 const data = [
   { title: "Parte 1", type: "Canon", authors: "@VictorFrankl", date: "2024-01-01" },
   { title: "Parte 2", type: "Canon", authors: "@VictorFrankl", date: "2024-01-10" },

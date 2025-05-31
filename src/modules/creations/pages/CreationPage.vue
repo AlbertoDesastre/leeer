@@ -23,7 +23,7 @@
           y da sentido a nuestras vidas.
         </p>
       </section>
-      <PartsTable :columns="columns" :data="data" :pagination="pagination" />
+      <PartsTable :columns="columns" :data="parts" :pagination="pagination" />
     </div>
   </section>
 </template>
@@ -33,19 +33,26 @@ import { onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
 
 import { useCreations } from "../composables/useCreations";
+import { useParts, type ColumnData, type PartWithCollab } from "../composables/useParts";
 
 import CreationDetails from "../components/CreationDetails.vue";
 import PartsTable from "../components/PartsTable.vue";
-import TopHeader from "../../common/components/TopHeader.vue";
 
 const { getCreationsById } = useCreations();
+const { getPartsOf, formatPartsForTableColumns } = useParts();
+
 const route = useRoute();
 const creation = ref();
+const parts = ref<ColumnData[]>([]);
 
 onMounted(async () => {
-  console.log("estoy en creation page ", route.params.id);
+  // Selecciono la creation
   const creation_id = route.params.id as string;
   creation.value = await getCreationsById(creation_id);
+
+  // Y una vez la tengo recopilo todas sus partes
+  const data = await getPartsOf(creation_id);
+  parts.value = formatPartsForTableColumns(data as PartWithCollab[]);
 });
 
 const columns = [
@@ -67,48 +74,6 @@ const columns = [
   },
 ];
 
-const data = [
-  { title: "Parte 1", type: "Canon", authors: "@VictorFrankl", date: "2024-01-01" },
-  { title: "Parte 2", type: "Canon", authors: "@VictorFrankl", date: "2024-01-10" },
-  {
-    title: "Fanfic: El guardián",
-    type: "Fanfiction",
-    authors: "@UsuarioFan1",
-    date: "2024-02-05",
-  },
-  {
-    title: "Spinoff: El compañero",
-    type: "Spinoff",
-    authors: "@Colaborador2",
-    date: "2024-02-20",
-  },
-  { title: "Parte 3", type: "Canon", authors: "@VictorFrankl", date: "2024-03-01" },
-  {
-    title: "Fanfic: Esperanza",
-    type: "Fanfiction",
-    authors: "@FanWriter",
-    date: "2024-03-15",
-  },
-  {
-    title: "Spinoff: El regreso",
-    type: "Spinoff",
-    authors: "@Colaborador3",
-    date: "2024-04-01",
-  },
-  { title: "Parte 4", type: "Canon", authors: "@VictorFrankl", date: "2024-04-10" },
-  {
-    title: "Fanfic: Luz en la oscuridad",
-    type: "Fanfiction",
-    authors: "@FanLuz",
-    date: "2024-04-20",
-  },
-  {
-    title: "Spinoff: El nuevo camino",
-    type: "Spinoff",
-    authors: "@Colaborador4",
-    date: "2024-05-01",
-  },
-];
 const pagination = { pageSize: 10 };
 </script>
 

@@ -12,3 +12,15 @@ export type Creation = {
   /* Puede haber alguna llamada en la que no haya usuario asociado. */
   user?: User;
 };
+
+export type Part = {
+  part_id: string;
+  title: string;
+  content: string;
+  word_count: number | null;
+  reading_time: number | null;
+  thumbnail: string | null;
+  is_draft: boolean;
+  creation_date: string;
+  modification_date: string;
+};

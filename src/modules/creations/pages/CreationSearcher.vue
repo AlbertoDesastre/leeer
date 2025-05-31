@@ -31,7 +31,6 @@ import type { Creation } from "../types";
 import { useCreations } from "../composables/useCreations";
 
 import fallback_thumbnail from "../../../../imgs/fallback_thumbnail.png";
-import TopHeader from "../../common/components/TopHeader.vue";
 
 const { getCreationsByTerm } = useCreations();
 const route = useRoute();
