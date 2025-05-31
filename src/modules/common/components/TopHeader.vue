@@ -16,9 +16,9 @@
           <!-- tabindex me permite desplegar el dropdown a conveniencia al hacer click en explorar -->
           <p tabindex="0">Explorar</p>
           <ul>
-            <li>
+            <!--          <li>
               <RouterLink :to="{ name: 'creations' }">Creaciones</RouterLink>
-            </li>
+            </li> -->
             <li>
               <RouterLink :to="{ name: '' }"></RouterLink>
             </li>
@@ -27,7 +27,7 @@
       </div>
 
       <!-- Buscador y otras opciones -->
-      <input type="text" placeholder="Buscar creaciones..." />
+      <input type="text" placeholder="Buscar creaciones..." v-model="term" @keyup.enter="search" />
 
       <!--      
       <div class="user-navigation">
@@ -154,3 +154,15 @@
   padding: 0px;
 }
 </style>
+
+<script setup lang="ts">
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
+const term = ref("");
+
+async function search() {
+  router.push({ name: "creations-search", query: { search: term.value } });
+}
+</script>

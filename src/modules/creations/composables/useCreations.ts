@@ -26,8 +26,51 @@ export const useCreations = () => {
     return creations;
   };
 
+  const getCreationsByName = async ({
+    name,
+    limit,
+    offset,
+  }: {
+    name: string;
+    limit: number;
+    offset: number;
+  }) => {
+    const creations = await fetch(
+      `http://localhost:3000/creations/${name}?limit=${limit}&offset=${offset}`
+    )
+      .then((response) => response.json())
+      .then((data) => data as Creation[])
+      .catch((err) => {
+        console.log(err);
+      });
+
+    return creations;
+  };
+
+  const getCreationsByTerm = async ({
+    term,
+    limit,
+    offset,
+  }: {
+    term: string;
+    limit: number;
+    offset: number;
+  }) => {
+    const creations = await fetch(
+      `http://localhost:3000/creations/all-by/${term}?limit=${limit}&offset=${offset}`
+    )
+      .then((response) => response.json())
+      .then((data) => data as Creation[])
+      .catch((err) => {
+        console.log(err);
+      });
+
+    return creations;
+  };
   // Devuelve el objeto de mi composable con datos o funciones
   return {
     getCreations,
+    getCreationsByName,
+    getCreationsByTerm,
   };
 };

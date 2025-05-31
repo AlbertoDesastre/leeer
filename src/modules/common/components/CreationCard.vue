@@ -3,7 +3,7 @@
     <span v-if="!props.creation.is_draft">¡Colaborativo!</span>
     <n-card :title="props.creation.title">
       <template #cover>
-        <RouterLink :to="{ name: 'creations' }">
+        <RouterLink :to="{ name: 'home' }">
           <img
             :src="props.creation.thumbnail ? props.creation.thumbnail : fallback_thumbnail"
             :alt="props.creation.title"

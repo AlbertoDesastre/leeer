@@ -12,14 +12,12 @@ export const router = createRouter({
       path: "/",
       name: "home",
       component: HomeView,
-      children: [
-        {
-          path: "/creations",
-          name: "creations",
-          /* Estos imports lo que hacen es cargar en memoria el componente SOLO cuando se visite su página, por eso lo pongo todo el rato */
-          component: () => import("../modules/creations/CreationsView.vue"),
-        },
-      ],
+    },
+    {
+      path: "/creation/search",
+      name: "creations-search",
+      /* Estos imports lo que hacen es cargar en memoria el componente SOLO cuando se visite su página, por eso lo pongo todo el rato */
+      component: () => import("../modules/creations/pages/CreationSearcher.vue"),
     },
     // Rutas sin TopHeader
     { path: "/login", name: "login", component: () => import("../modules/auth/pages/LoginPage.vue") },
