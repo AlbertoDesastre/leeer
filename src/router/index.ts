@@ -1,5 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
+
 import HomeView from "../modules/home/HomeView.vue";
+import CreationsView from "../modules/creations/CreationsView.vue";
 
 /* Configuración de las rutas */
 export const router = createRouter({
@@ -14,15 +16,22 @@ export const router = createRouter({
       component: HomeView,
     },
     {
-      path: "/creation/search",
-      name: "creations-search",
-      /* Estos imports lo que hacen es cargar en memoria el componente SOLO cuando se visite su página, por eso lo pongo todo el rato */
-      component: () => import("../modules/creations/pages/CreationSearcher.vue"),
-    },
-    {
-      path: "/creations/:id",
-      name: "creation-details",
-      component: () => import("../modules/creations/pages/CreationPage.vue"),
+      path: "/creations",
+      name: "creations",
+      component: CreationsView,
+      /* Ahora creations es ruta Padre y search y details hijas, que comparten el componente TopHeader */
+      children: [
+        {
+          path: "search",
+          name: "creations-search",
+          component: () => import("../modules/creations/pages/CreationSearcher.vue"),
+        },
+        {
+          path: ":id",
+          name: "creation-details",
+          component: () => import("../modules/creations/pages/CreationPage.vue"),
+        },
+      ],
     },
     // Rutas sin TopHeader
     { path: "/login", name: "login", component: () => import("../modules/auth/pages/LoginPage.vue") },

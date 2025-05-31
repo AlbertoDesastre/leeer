@@ -1,6 +1,4 @@
 <template>
-  <TopHeader />
-
   <Suspense>
     <section class="creation-searcher-page">
       <ul v-if="creations && creations.length > 0" class="creations-list">
