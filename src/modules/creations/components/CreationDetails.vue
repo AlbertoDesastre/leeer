@@ -3,14 +3,27 @@
     <n-card>
       <!-- Información de la obra -->
       <template #cover>
-        <route-link to="/creation/1">
-          <img src="../../../../imgs/hombre-busca-sentido.webp" />
-        </route-link>
+        <RouterLink :to="{ name: 'creation-details', params: { id: props.creation.creation_id } }">
+          <img :src="creation.thumbnail || fallback_thumbnail" :alt="creation.title" />
+        </RouterLink>
       </template>
-      <h2>Hombre en busca de sentido</h2>
+      <h2>
+        <RouterLink :to="{ name: 'creation-details', query: { search: props.creation.creation_id } }">
+          {{ props.creation.title }}
+        </RouterLink>
+      </h2>
       <p>
-        Por <strong><router-link to="/author/1">Autor 1</router-link></strong>
+        Por
+        <strong>
+          <RouterLink
+            :to="{ name: 'creations-search', query: { search: props.creation.user?.nickname } }"
+          >
+            {{ props.creation.user?.nickname }}
+          </RouterLink>
+        </strong>
       </p>
+      <p class="synopsis">{{ props.creation.synopsis }}</p>
+      <p class="date">Creado: {{ new Date(props.creation.creation_date).toLocaleDateString() }}</p>
       <!-- Colaboradores -->
       <template v-if="displayCoAuthors" #footer>
         <p>¡Ya han colaborado en esta creación X usuarios!</p>
@@ -28,14 +41,21 @@
 
 <script setup lang="ts">
 import { NCard, NButton, NSpace } from "naive-ui";
+import { RouterLink } from "vue-router";
+
+import type { Creation } from "../types";
+
 import CoAuthorsDisplay from "../components/CoAuthorsDisplay.vue";
+import fallback_thumbnail from "../../../../imgs/fallback_thumbnail.png";
 
 const props = defineProps<{
-  isAuthor: boolean;
-  displayCoAuthors: boolean;
+  creation: Creation;
+  isAuthor?: boolean;
+  displayCoAuthors?: boolean;
 }>();
 
 const coauthorImages = [
+  // Aquí podrías mapear los coautores reales si los tienes en el modelo
   "../../../../imgs/gato-escritor.png",
   "../../../../imgs/gato-escritor.png",
   "../../../../imgs/gato-escritor.png",
@@ -57,5 +77,15 @@ const coauthorImages = [
 .creation-details p,
 .creation-details button {
   font-size: 1rem;
+}
+.synopsis {
+  font-size: 0.95rem;
+  color: #444;
+  margin: 0.5em 0 0.2em 0;
+}
+.date {
+  font-size: 0.85rem;
+  color: var(--color-gray, #888);
+  margin: 0;
 }
 </style>

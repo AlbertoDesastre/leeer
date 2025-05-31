@@ -1,5 +1,5 @@
 <template>
-  <button class="close-button">ATRÁS</button>
+  <button class="close-button" @click="goHome">ATRÁS</button>
   <section class="text-editor-wrapper">
     <section class="left-panel">
       <article class="part-selector">
@@ -58,6 +58,10 @@
 import { NButton, NButtonGroup } from "naive-ui";
 import CoAuthorsDisplay from "../../creations/components/CoAuthorsDisplay.vue";
 import { ref } from "vue";
+import { useRouter } from "vue-router";
+const router = useRouter();
+const goHome = () => router.push({ name: "home" });
+
 const authorImg = ["../../../../imgs/gato-detective.png"];
 
 const coauthorImages = [

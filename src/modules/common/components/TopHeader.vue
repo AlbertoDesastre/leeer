@@ -1,41 +1,55 @@
 <template>
   <section class="header-wrapper">
     <header>
-      <router-link to="/">leeer</router-link>
       <div>
-        <router-link to="/login">Iniciar sesión</router-link>
-        <router-link to="/register">Registrarse</router-link>
+        <RouterLink :to="{ name: 'login' }">Iniciar sesión</RouterLink>
+        <RouterLink :to="{ name: 'register' }">Registrarse</RouterLink>
       </div>
     </header>
 
     <nav class="navigation-wrapper">
       <!-- Navegación principal -->
       <div class="main-navigation">
-        <router-link to="/desk" tabindex="0">Escritorio</router-link>
-        <nav class="dropdown-wrapper">
+        <RouterLink :to="{ name: 'home' }">Home</RouterLink>
+        <RouterLink :to="{ name: 'desk' }" tabindex="0">Escritorio</RouterLink>
+        <nav v-if="!hideExplore" class="dropdown-wrapper">
           <!-- tabindex me permite desplegar el dropdown a conveniencia al hacer click en explorar -->
           <p tabindex="0">Explorar</p>
           <ul>
             <li>
-              <router-link to="/creations">Creaciones</router-link>
-            </li>
-            <li>
-              <router-link to="/authors">Autores</router-link>
+              <RouterLink :to="{ name: '' }"></RouterLink>
             </li>
           </ul>
         </nav>
       </div>
 
       <!-- Buscador y otras opciones -->
-      <input type="text" placeholder="Buscar creaciones..." />
+      <input type="text" placeholder="Buscar creaciones..." v-model="term" @keyup.enter="search" />
 
+      <!--      
       <div class="user-navigation">
-        <router-link to="/notificaciones">Notificación</router-link>
-        <router-link to="/profile">Contacto</router-link>
-      </div>
+        <RouterLink to="/notificaciones">Notificación</RouterLink>
+        <RouterLink to="/profile">Contacto</RouterLink>
+      </div> 
+      -->
     </nav>
   </section>
 </template>
+<script setup lang="ts">
+import { ref, computed } from "vue";
+import { useRouter, useRoute } from "vue-router";
+
+const router = useRouter();
+const route = useRoute();
+const term = ref("");
+
+// Oculta el botón de explorar si estamos en el escritorio
+const hideExplore = computed(() => route.name === "desk");
+
+async function search() {
+  router.push({ name: "creations-search", query: { search: term.value } });
+}
+</script>
 
 <style scoped>
 .header-wrapper nav,
@@ -50,9 +64,11 @@
 }
 
 .header-wrapper > header {
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
+  font-size: 16px;
   padding: 16px 0 8px 0;
+  margin-right: 10px;
 }
 
 .header-wrapper > header > div {
@@ -69,6 +85,7 @@
 }
 
 .header-wrapper nav input {
+  min-width: 500px;
   margin: 5px 0px;
   padding: 7px;
   border: none;
@@ -81,6 +98,20 @@
   color: #fff;
 }
 
+.header-wrapper > header a,
+.header-wrapper nav a,
+.header-wrapper nav .main-navigation p {
+  cursor: pointer;
+}
+
+.main-navigation a:focus,
+.main-navigation a:hover,
+.main-navigation p:focus,
+.main-navigation p:hover {
+  background-color: var(--color-action-blue);
+  color: #fff;
+}
+
 .main-navigation .dropdown-wrapper {
   display: flex;
   flex-direction: column;
@@ -89,7 +120,7 @@
   margin-left: 8px;
 }
 
-.main-navigation router-link,
+.main-navigation a,
 .main-navigation p {
   width: 130px;
   padding: 30px;
@@ -131,7 +162,7 @@
 .dropdown-wrapper p {
   width: 130px;
 }
-.dropdown-wrapper ul li router-link {
+.dropdown-wrapper ul li a {
   padding: 0px;
 }
 </style>
