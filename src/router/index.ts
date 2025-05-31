@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 
 import HomeView from "../modules/home/HomeView.vue";
-import CreationsView from "../modules/creations/CreationsView.vue";
 
 /* Configuración de las rutas */
 export const router = createRouter({
@@ -18,7 +17,7 @@ export const router = createRouter({
     {
       path: "/creations",
       name: "creations",
-      component: CreationsView,
+      component: () => import("../modules/creations/CreationsView.vue"),
       /* Ahora creations es ruta Padre y search y details hijas, que comparten el componente TopHeader */
       children: [
         {
@@ -33,6 +32,7 @@ export const router = createRouter({
         },
       ],
     },
+
     // Rutas sin TopHeader
     { path: "/login", name: "login", component: () => import("../modules/auth/pages/LoginPage.vue") },
     {
@@ -51,17 +51,6 @@ export const router = createRouter({
       redirect: "/",
     },
   ],
-});
-
-/* Guard para cuando no estás */
-router.beforeEach((to, _from, next) => {
-  /* La manera de leer esto es "cuando el usuario es "cuando el usuario vaya hacia 'desk' y no tenga esta propiedad lo redirijo a otro sitio" */
-  if (to.name === "desk" && to.query.isLogged !== "true") {
-    // Si no está logeado, redirige a login
-    return next({ name: "login" });
-  }
-  /* Si se verifica el estado de loggin entonces le deja pasar a donde quería ir, en este caso, a desk. */
-  next();
 });
 
 export default router;

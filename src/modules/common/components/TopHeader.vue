@@ -12,13 +12,10 @@
       <div class="main-navigation">
         <RouterLink :to="{ name: 'home' }">Home</RouterLink>
         <RouterLink :to="{ name: 'desk' }" tabindex="0">Escritorio</RouterLink>
-        <nav class="dropdown-wrapper">
+        <nav v-if="!hideExplore" class="dropdown-wrapper">
           <!-- tabindex me permite desplegar el dropdown a conveniencia al hacer click en explorar -->
           <p tabindex="0">Explorar</p>
           <ul>
-            <!--          <li>
-              <RouterLink :to="{ name: 'creations' }">Creaciones</RouterLink>
-            </li> -->
             <li>
               <RouterLink :to="{ name: '' }"></RouterLink>
             </li>
@@ -39,11 +36,15 @@
   </section>
 </template>
 <script setup lang="ts">
-import { ref } from "vue";
-import { useRouter } from "vue-router";
+import { ref, computed } from "vue";
+import { useRouter, useRoute } from "vue-router";
 
 const router = useRouter();
+const route = useRoute();
 const term = ref("");
+
+// Oculta el botón de explorar si estamos en el escritorio
+const hideExplore = computed(() => route.name === "desk");
 
 async function search() {
   router.push({ name: "creations-search", query: { search: term.value } });

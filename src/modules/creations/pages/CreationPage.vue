@@ -29,7 +29,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { onMounted, ref, h } from "vue";
 import { useRoute } from "vue-router";
 
 import { useCreations } from "../composables/useCreations";
@@ -73,7 +73,6 @@ const columns = [
     key: "date",
   },
 ];
-
 const pagination = { pageSize: 10 };
 </script>
 
