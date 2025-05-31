@@ -5,9 +5,14 @@
     <section class="creation-searcher-page">
       <ul v-if="creations && creations.length > 0" class="creations-list">
         <li v-for="creation in creations" :key="creation.creation_id" class="creation-item">
-          <img :src="creation.thumbnail || fallback_thumbnail" alt="Imagen de la creación" />
+          <img
+            :src="creation.thumbnail || fallback_thumbnail"
+            alt="Imagen de la creación"
+            @click="search(creation.creation_id)"
+          />
           <article class="creation-info">
-            <h3>{{ creation.title }}</h3>
+            <h3 @click="search(creation.creation_id)">{{ creation.title }}</h3>
+
             <p class="creation-user">
               Por <RouterLink :to="''">@{{ creation.user?.nickname }}</RouterLink>
             </p>
@@ -22,14 +27,17 @@
 
 <script setup lang="ts">
 import { onMounted, ref, watch } from "vue";
-import TopHeader from "../../common/components/TopHeader.vue";
-import fallback_thumbnail from "../../../../imgs/fallback_thumbnail.png";
-import { useRoute } from "vue-router";
-import { useCreations } from "../composables/useCreations";
+import { useRoute, useRouter } from "vue-router";
+
 import type { Creation } from "../types";
+import { useCreations } from "../composables/useCreations";
+
+import fallback_thumbnail from "../../../../imgs/fallback_thumbnail.png";
+import TopHeader from "../../common/components/TopHeader.vue";
 
 const { getCreationsByTerm } = useCreations();
 const route = useRoute();
+const router = useRouter();
 const creations = ref<Creation[]>();
 
 /* Paso y me creo un método propio para volver a utilizar la búsqueda cuando venga de otra página y se monte por primera vez el componente (onMounted) y luego cada vez que cambie el parámetro de búsqueda si el usuario busca otra vez desde CreationSearcher */
@@ -42,10 +50,14 @@ const fetchCreations = async () => {
     offset: 0,
   })) as Creation[];
 };
-
 onMounted(fetchCreations);
 // Si hay algún cambio en la ruta se ejecuta el callback de la derecha.
 watch(() => route.query.search, fetchCreations);
+
+// Utilizo la misma función para redirigir a la página que quiero
+async function search(id: string) {
+  router.push({ name: "creation-details", params: { id } });
+}
 </script>
 
 <style scoped>

@@ -1,6 +1,13 @@
 <template>
   <section class="creation-page">
-    <CreationDetails :is-author="false" :display-co-authors="true" />
+    <!-- Si no compruebo que la creation existe tira error. Esto es porque cuando llega aquí todavía tiene que cargar la creation, y nada más montar el componente se encuentra en undefined -->
+    <CreationDetails
+      v-if="creation"
+      :creation="creation"
+      :is-author="false"
+      :display-co-authors="true"
+    />
+    <div v-else class="loading-state">Cargando...</div>
     <!-- DESCRIPCIÓN -->
     <div class="description-and-parts-wrapper">
       <section class="description-container">
@@ -22,8 +29,24 @@
 </template>
 
 <script setup lang="ts">
+import { onMounted, ref } from "vue";
+import { useRoute } from "vue-router";
+
+import { useCreations } from "../composables/useCreations";
+
 import CreationDetails from "../components/CreationDetails.vue";
 import PartsTable from "../components/PartsTable.vue";
+import TopHeader from "../../common/components/TopHeader.vue";
+
+const { getCreationsById } = useCreations();
+const route = useRoute();
+const creation = ref();
+
+onMounted(async () => {
+  console.log("estoy en creation page ", route.params.id);
+  const creation_id = route.params.id as string;
+  creation.value = await getCreationsById(creation_id);
+});
 
 const columns = [
   {
@@ -43,6 +66,7 @@ const columns = [
     key: "date",
   },
 ];
+
 const data = [
   { title: "Parte 1", type: "Canon", authors: "@VictorFrankl", date: "2024-01-01" },
   { title: "Parte 2", type: "Canon", authors: "@VictorFrankl", date: "2024-01-10" },

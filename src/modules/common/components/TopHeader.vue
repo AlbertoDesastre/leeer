@@ -38,6 +38,17 @@
     </nav>
   </section>
 </template>
+<script setup lang="ts">
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
+const term = ref("");
+
+async function search() {
+  router.push({ name: "creations-search", query: { search: term.value } });
+}
+</script>
 
 <style scoped>
 .header-wrapper nav,
@@ -154,15 +165,3 @@
   padding: 0px;
 }
 </style>
-
-<script setup lang="ts">
-import { ref } from "vue";
-import { useRouter } from "vue-router";
-
-const router = useRouter();
-const term = ref("");
-
-async function search() {
-  router.push({ name: "creations-search", query: { search: term.value } });
-}
-</script>

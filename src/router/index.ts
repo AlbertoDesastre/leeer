@@ -19,6 +19,11 @@ export const router = createRouter({
       /* Estos imports lo que hacen es cargar en memoria el componente SOLO cuando se visite su página, por eso lo pongo todo el rato */
       component: () => import("../modules/creations/pages/CreationSearcher.vue"),
     },
+    {
+      path: "/creations/:id",
+      name: "creation-details",
+      component: () => import("../modules/creations/pages/CreationPage.vue"),
+    },
     // Rutas sin TopHeader
     { path: "/login", name: "login", component: () => import("../modules/auth/pages/LoginPage.vue") },
     {

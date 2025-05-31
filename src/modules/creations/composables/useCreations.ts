@@ -47,6 +47,18 @@ export const useCreations = () => {
     return creations;
   };
 
+  // En realidad este método hace la misma llamada API que getCreationsByName pero para dejar más claro lo que hace la separo
+  const getCreationsById = async (creation_id: string) => {
+    const creations = await fetch(`http://localhost:3000/creations/${creation_id}`)
+      .then((response) => response.json())
+      .then((data) => data as Creation[])
+      .catch((err) => {
+        console.log(err);
+      });
+
+    return creations;
+  };
+
   const getCreationsByTerm = async ({
     term,
     limit,
@@ -67,10 +79,12 @@ export const useCreations = () => {
 
     return creations;
   };
+
   // Devuelve el objeto de mi composable con datos o funciones
   return {
     getCreations,
     getCreationsByName,
     getCreationsByTerm,
+    getCreationsById,
   };
 };
