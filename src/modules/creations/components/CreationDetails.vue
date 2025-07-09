@@ -3,23 +3,15 @@
     <n-card>
       <!-- Información de la obra -->
       <template #cover>
-        <RouterLink :to="{ name: 'creation-details', params: { id: props.creation.creation_id } }">
-          <img :src="creation.thumbnail || fallback_thumbnail" :alt="creation.title" />
-        </RouterLink>
+        <img :src="creation.thumbnail || fallback_thumbnail" :alt="creation.title" />
       </template>
       <h2>
-        <RouterLink :to="{ name: 'creation-details', query: { search: props.creation.creation_id } }">
-          {{ props.creation.title }}
-        </RouterLink>
+        {{ props.creation.title }}
       </h2>
       <p>
         Por
         <strong>
-          <RouterLink
-            :to="{ name: 'creations-search', query: { search: props.creation.user?.nickname } }"
-          >
-            {{ props.creation.user?.nickname }}
-          </RouterLink>
+          {{ props.creation.user?.nickname }}
         </strong>
       </p>
       <p class="synopsis">{{ props.creation.synopsis }}</p>
