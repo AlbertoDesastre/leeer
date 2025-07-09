@@ -29,7 +29,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, h } from "vue";
+import { onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
 
 import { useCreations } from "../composables/useCreations";
@@ -48,7 +48,7 @@ const parts = ref<ColumnData[]>([]);
 onMounted(async () => {
   // Selecciono la creation
   const creation_id = route.params.id as string;
-  creation.value = await getCreationsById(creation_id);
+  creation.value = await getCreationsById(creation_id); // TODO: Hacer una sola llamada para obtener las partes de una creation. Si ya me viene en la ruta para qué llamo a la API?
 
   // Y una vez la tengo recopilo todas sus partes
   const data = await getPartsOf(creation_id);
