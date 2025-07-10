@@ -33,7 +33,7 @@ export const useParts = () => {
         title: part.title,
         type,
         authors: part.user ? `@${part.user.nickname}` : "",
-        date: part.creation_date,
+        date: new Date(part.creation_date).toLocaleDateString(),
       };
     });
   };
