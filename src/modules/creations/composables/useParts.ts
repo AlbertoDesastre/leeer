@@ -26,13 +26,13 @@ export const useParts = () => {
         type = ["ORIGINAL"];
       } else {
         // recorre el array de strings, los pone a mayúsculas
-        type = part.collaborationType.map((type) => type.toUpperCase() + " ");
+        type = part.collaborationType.map((type) => type.toUpperCase());
       }
 
       return {
         title: part.title,
         type,
-        authors: part.user ? `@${part.user.nickname}` : "",
+        authors: part.user ? `@${part.user.nickname}` : "", // se le pone un string vacío si no viene usuario porque las historias/partes se quedan publicadas incluso cuando el usuario se eliminó de la BD
         date: new Date(part.creation_date).toLocaleDateString(),
       };
     });
