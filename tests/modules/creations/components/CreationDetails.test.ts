@@ -29,6 +29,30 @@ describe("<CreationDetails/>", () => {
       displayCoAuthors: false,
     },
   });
+  test("notes about testing", async () => {
+    //await wrapper.find("input[type='text']").setValue("abc");
+    // 🎯 Simular eventos: trigger() para clicks, keypress, etc.
+    // Otros eventos: "keypress.enter", "submit", "focus", "blur"
+    //await wrapper.find("button").trigger("click // keypress.enter");
+    // 📡 Verificar eventos emitidos: wrapper.emitted("nombreEvento")
+    // [0] = primer evento emitido, [1] = segundo, etc. || ?.[0] = optional chaining por si no se emitió el evento
+    //expect(wrapper.emitted("doOperation")?.[0]).toEqual("something");
+    // 🔧 Acceder a datos del componente: wrapper.vm (Vue Model) || (wrapper.vm as any) = bypass TypeScript para acceder propiedades
+    //  expect((wrapper.vm as any).something).toBe("");
+
+    // 🔍 Más verificaciones:
+    // .exists() - si existe el elemento
+    // .isVisible() - si está visible
+    // .text() - contenido de texto
+    // .html() - HTML completo
+    // .classes() - array de clases CSS
+    // .attributes("src") - atributos específicos
+
+    // 📊 Verificar props de componentes hijos:
+    // wrapper.findComponent(MiComponente).props("miProp")
+
+    expect(true).toBe(true);
+  });
 
   test("should handle creation without user gracefully", () => {
     const creationWithoutUser = { ...creation, user: null } as any;
