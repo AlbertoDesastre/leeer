@@ -1,5 +1,5 @@
 <template>
-  <button class="close-button" @click="goHome">ATRÁS</button>
+  <button class="close-button" @click="() => router.push({ name: 'home' })">ATRÁS</button>
   <section class="text-editor-wrapper">
     <section class="left-panel">
       <article class="part-selector">
@@ -60,7 +60,6 @@ import CoAuthorsDisplay from "../../creations/components/CoAuthorsDisplay.vue";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 const router = useRouter();
-const goHome = () => router.push({ name: "home" });
 
 const authorImg = ["../../../../imgs/gato-detective.png"];
 
