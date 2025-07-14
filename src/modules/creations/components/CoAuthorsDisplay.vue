@@ -12,7 +12,6 @@
 
 <script setup lang="ts">
 // Componente visual para mostrar los avatares de los coautores solapados
-import { defineProps } from "vue";
 const props = defineProps<{ images: string[] }>();
 </script>
 

@@ -1,26 +1,91 @@
 import { mount } from "@vue/test-utils";
+
 import CreationDetails from "../../../../src/modules/creations/components/CreationDetails.vue";
+import CoAuthorsDisplay from "../../../../src/modules/creations/components/CoAuthorsDisplay.vue";
+import fallback_thumbnail from "../../../../imgs/fallback_thumbnail.png";
 
 describe("<CreationDetails/>", () => {
-  test("should show a fallback image if no one was provided", () => {
-    const creation = {
-      creation_id: "13189de3-c0c3-409e-897a-242d26d59105",
-      title: "Obra de MaryShelley",
-      is_draft: false,
-      synopsis: "Una obra creada por MaryShelley como parte del seeder.",
-      description: null,
-      thumbnail: "",
-      creation_date: "2025-07-09T17:28:38.000Z",
-      modification_date: "2025-07-09T17:28:38.000Z",
-      user: {
-        user_id: "f2e6e9b7-1d42-4bcf-b3db-c2d4b02e63e2",
-        nickname: "MaryShelley",
-        email: "mary.shelley@gothic.com",
-        profile_picture: "https://example.com/avatar7.jpg",
-        description: "Pionera del horror y la ciencia ficción.",
-      },
-    };
+  const creation = {
+    creation_id: "13189de3-c0c3-409e-897a-242d26d59105",
+    title: "Obra de MaryShelley",
+    is_draft: false,
+    synopsis: "Una obra creada por MaryShelley como parte del seeder.",
+    description: null,
+    thumbnail: "",
+    creation_date: "2025-07-09T17:28:38.000Z",
+    modification_date: "2025-07-09T17:28:38.000Z",
+    user: {
+      user_id: "f2e6e9b7-1d42-4bcf-b3db-c2d4b02e63e2",
+      nickname: "MaryShelley",
+      email: "mary.shelley@gothic.com",
+      profile_picture: "https://example.com/avatar7.jpg",
+      description: "Pionera del horror y la ciencia ficción.",
+    },
+  };
 
+  test("should handle creation without user gracefully", () => {
+    const creationWithoutUser = { ...creation, user: null } as any;
+
+    const wrapper = mount(CreationDetails, {
+      props: {
+        creation: creationWithoutUser,
+        isAuthor: false,
+        displayCoAuthors: false,
+      },
+    });
+
+    // No debería crashear, pero el strong podría estar vacío
+    expect(wrapper.find("strong").text()).toBe("");
+  });
+
+  test("should show a fallback image and alt attribute if no thumbnail was provided", () => {
+    const wrapper = mount(CreationDetails, {
+      props: {
+        creation, // este creation tiene thumbnail = ""
+        isAuthor: false,
+        displayCoAuthors: false,
+      },
+    });
+    const img = wrapper.find("img");
+
+    expect(img.attributes("src")).toContain(fallback_thumbnail);
+    expect(img.attributes("alt")).toContain(creation.title);
+  });
+
+  test("should show all data regarding creation", () => {
+    const thumbnail = "doraemon.png";
+    const wrapper = mount(CreationDetails, {
+      props: {
+        creation: { ...creation, thumbnail },
+        isAuthor: false,
+        displayCoAuthors: false,
+      },
+    });
+
+    expect(wrapper.find("img").attributes("src")).toContain(thumbnail);
+    expect(wrapper.find("img").attributes("alt")).toContain(creation.title);
+    expect(wrapper.find("h2").text()).toContain(creation.title);
+    expect(wrapper.find("strong").text()).toContain(creation.user.nickname);
+    expect(wrapper.find("p.synopsis").text()).toContain(creation.synopsis); // it caught my attention that the clasess go right after the element name after a "."
+    expect(wrapper.find("p.date").text()).toContain(
+      new Date(creation.creation_date).toLocaleDateString()
+    );
+  });
+
+  test("should show <CoAuthorsDisplay/> if 'displayCoAuthors': true", () => {
+    const wrapper = mount(CreationDetails, {
+      props: {
+        creation,
+        isAuthor: false,
+        displayCoAuthors: true,
+      },
+    });
+
+    const coAuthorsComponent = wrapper.findComponent(CoAuthorsDisplay);
+    expect(coAuthorsComponent.exists()).toBe(true);
+  });
+
+  test("should show button to collaborate if the user seeing this component is not the author", () => {
     const wrapper = mount(CreationDetails, {
       props: {
         creation,
@@ -28,5 +93,33 @@ describe("<CreationDetails/>", () => {
         displayCoAuthors: false,
       },
     });
+
+    expect(wrapper.find("span.n-button__content").text()).toContain("Colaborar en esta historia");
+  });
+
+  test("should NOT show CoAuthorsDisplay if displayCoAuthors is false", () => {
+    const wrapper = mount(CreationDetails, {
+      props: {
+        creation,
+        isAuthor: false,
+        displayCoAuthors: false,
+      },
+    });
+
+    const coAuthorsComponent = wrapper.findComponent(CoAuthorsDisplay);
+    expect(coAuthorsComponent.exists()).toBe(false);
+  });
+
+  test("should NOT show collaborate button if user is the author", () => {
+    const wrapper = mount(CreationDetails, {
+      props: {
+        creation,
+        isAuthor: true, // autor
+        displayCoAuthors: false,
+      },
+    });
+
+    const collaborateButton = wrapper.find("span.n-button__content");
+    expect(collaborateButton.exists()).toBe(false);
   });
 });

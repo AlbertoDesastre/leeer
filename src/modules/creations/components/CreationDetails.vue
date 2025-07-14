@@ -33,7 +33,6 @@
 
 <script setup lang="ts">
 import { NCard, NButton, NSpace } from "naive-ui";
-import { RouterLink } from "vue-router";
 
 import type { Creation } from "../types";
 
