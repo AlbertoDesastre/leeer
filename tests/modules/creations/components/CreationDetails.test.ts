@@ -29,7 +29,7 @@ describe("<CreationDetails/>", () => {
       displayCoAuthors: false,
     },
   });
-  test("notes about testing", async () => {
+  test("notes about testing: events, effects, simulates emitts vue machine", async () => {
     //await wrapper.find("input[type='text']").setValue("abc");
     // 🎯 Simular eventos: trigger() para clicks, keypress, etc.
     // Otros eventos: "keypress.enter", "submit", "focus", "blur"
@@ -52,6 +52,35 @@ describe("<CreationDetails/>", () => {
     // wrapper.findComponent(MiComponente).props("miProp")
 
     expect(true).toBe(true);
+  });
+
+  test("notes about testing: spies, mocks, how to get refs of component", async () => {
+    // 🎭 Crear mock de la función scrollTo para espiar sus llamadas
+    // vi.fn() crea una función mock que podemos verificar después
+    const scrollToMock = vi.fn();
+
+    // 🔍 Obtener referencia al elemento del chat y mockear su método scrollTo
+    // wrapper.vm.$refs.chatRef accede a la referencia del template
+    // as HTMLDivElement = cast de TypeScript para tener autocompletado
+    //  const chatRef = wrapper.vm.$refs.chatRef as HTMLDivElement;
+    //  chatRef.scrollTo = scrollToMock;
+
+    // 🔄 Simular actualización de props que debería triggear el scroll
+    // Añadimos un nuevo mensaje al array existente usando spread operator
+    //await wrapper.setProps({ messages: [...messages, { id: 3, message: "Hey", itsMine: true }],});
+
+    // ⏱️ Esperar un tick para que Vue procese los cambios del DOM
+    // new Promise con setTimeout simula el nextTick de Vue
+    // 150ms debería ser suficiente para que se ejecute el scroll automático
+    // await new Promise((r) => setTimeout(r, 150));
+
+    // ✅ Verificar que scrollTo fue llamado exactamente 1 vez
+    //expect(scrollToMock).toHaveBeenCalledTimes(1);
+
+    // ✅ Verificar que scrollTo fue llamado con los parámetros correctos
+    // behavior: 'smooth' = animación suave del scroll
+    // top: expect.any(Number) = cualquier número (altura del scroll)
+    // expect(scrollToMock).toHaveBeenCalledWith({ behavior: "smooth", top: expect.any(Number),});
   });
 
   test("should handle creation without user gracefully", () => {
