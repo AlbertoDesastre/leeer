@@ -22,6 +22,13 @@ describe("<CreationDetails/>", () => {
       description: "Pionera del horror y la ciencia ficción.",
     },
   };
+  const wrapper = mount(CreationDetails, {
+    props: {
+      creation, // este creation tiene thumbnail = ""
+      isAuthor: false,
+      displayCoAuthors: false,
+    },
+  });
 
   test("should handle creation without user gracefully", () => {
     const creationWithoutUser = { ...creation, user: null } as any;
@@ -38,14 +45,24 @@ describe("<CreationDetails/>", () => {
     expect(wrapper.find("strong").text()).toBe("");
   });
 
-  test("should show a fallback image and alt attribute if no thumbnail was provided", () => {
+  test("should render the component without the optional props", () => {
     const wrapper = mount(CreationDetails, {
       props: {
-        creation, // este creation tiene thumbnail = ""
-        isAuthor: false,
-        displayCoAuthors: false,
+        creation,
       },
     });
+
+    expect(wrapper.find("img").attributes("src")).toContain(fallback_thumbnail);
+    expect(wrapper.find("img").attributes("alt")).toContain(creation.title);
+    expect(wrapper.find("h2").text()).toContain(creation.title);
+    expect(wrapper.find("strong").text()).toContain(creation.user.nickname);
+    expect(wrapper.find("p.synopsis").text()).toContain(creation.synopsis); // it caught my attention that the clasess go right after the element name after a "."
+    expect(wrapper.find("p.date").text()).toContain(
+      new Date(creation.creation_date).toLocaleDateString()
+    );
+  });
+
+  test("should show a fallback image and alt attribute if no thumbnail was provided", () => {
     const img = wrapper.find("img");
 
     expect(img.attributes("src")).toContain(fallback_thumbnail);
@@ -75,7 +92,7 @@ describe("<CreationDetails/>", () => {
   test("should show <CoAuthorsDisplay/> if 'displayCoAuthors': true", () => {
     const wrapper = mount(CreationDetails, {
       props: {
-        creation,
+        creation, // este creation tiene thumbnail = ""
         isAuthor: false,
         displayCoAuthors: true,
       },
@@ -86,26 +103,10 @@ describe("<CreationDetails/>", () => {
   });
 
   test("should show button to collaborate if the user seeing this component is not the author", () => {
-    const wrapper = mount(CreationDetails, {
-      props: {
-        creation,
-        isAuthor: false,
-        displayCoAuthors: false,
-      },
-    });
-
     expect(wrapper.find("span.n-button__content").text()).toContain("Colaborar en esta historia");
   });
 
   test("should NOT show CoAuthorsDisplay if displayCoAuthors is false", () => {
-    const wrapper = mount(CreationDetails, {
-      props: {
-        creation,
-        isAuthor: false,
-        displayCoAuthors: false,
-      },
-    });
-
     const coAuthorsComponent = wrapper.findComponent(CoAuthorsDisplay);
     expect(coAuthorsComponent.exists()).toBe(false);
   });
