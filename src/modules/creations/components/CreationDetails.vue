@@ -46,7 +46,6 @@ const props = defineProps<{
 }>();
 
 const coauthorImages = [
-  // Aquí podrías mapear los coautores reales si los tienes en el modelo
   "../../../../imgs/gato-escritor.png",
   "../../../../imgs/gato-escritor.png",
   "../../../../imgs/gato-escritor.png",
