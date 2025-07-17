@@ -58,10 +58,7 @@ const { login, register, error } = useAuth();
 
 const formRef = ref<FormInst | null>(null);
 // Estos son los valores del formulario, que inicializo por defecto
-const form = ref({
-  email: "",
-  password: "",
-});
+const form = ref({ email: "", password: "" });
 
 /* Algunas reglas de FormRules vienen explicadas en su librería de componentes original, aquí: https://www.naiveui.com/en-US/light/components/form#API
 ¡OJO! Pero todas las reglas vienen en realidad de otra librería llamada "async-validator" que es la que realmente valida los datos: https://github.com/yiminghe/async-validator */
