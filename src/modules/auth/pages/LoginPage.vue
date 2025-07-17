@@ -46,11 +46,15 @@
 
 <script setup lang="ts">
 // Formulario de registro de usuario con avatar, nickname, descripción, email y doble contraseña
+import { ref } from "vue";
 import { NForm, NFormItem, NInput, NButton, NAvatar } from "naive-ui";
 import type { FormInst, FormRules } from "naive-ui";
-import { ref } from "vue";
+
+import { useAuth } from "../composables/useAuth";
 import fallback_icon from "../../../../imgs/gato-detective.png";
 import personas_escribiendo from "../../../../imgs/personas-escribiendo.png";
+
+const { login, register, error } = useAuth();
 
 const formRef = ref<FormInst | null>(null);
 // Estos son los valores del formulario, que inicializo por defecto
@@ -72,10 +76,10 @@ const rules: FormRules = {
 
 function handleSubmit() {
   /* El "formRef" tiene el tipo FormInst. Ese tipo incorpora un método "validate" incrustado a cada valor. Por eso se puede usar esta función aquí, me la proveé Nativeui */
-  formRef.value?.validate((errors) => {
+  formRef.value?.validate(async (errors) => {
     if (!errors) {
-      // Aquí iría la lógica de registro/envío
-      alert("Formulario válido");
+      const response = await login({ email: form.value.email, password: form.value.password });
+      console.log(response);
     }
   });
 }
