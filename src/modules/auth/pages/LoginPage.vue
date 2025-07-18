@@ -47,6 +47,7 @@
 <script setup lang="ts">
 // Formulario de registro de usuario con avatar, nickname, descripción, email y doble contraseña
 import { ref } from "vue";
+import { useRouter } from "vue-router";
 import { NForm, NFormItem, NInput, NButton, NAvatar } from "naive-ui";
 import type { FormInst, FormRules } from "naive-ui";
 
@@ -59,7 +60,7 @@ const { login, register, error } = useAuth();
 const formRef = ref<FormInst | null>(null);
 // Estos son los valores del formulario, que inicializo por defecto
 const form = ref({ email: "", password: "" });
-
+const router = useRouter();
 /* Algunas reglas de FormRules vienen explicadas en su librería de componentes original, aquí: https://www.naiveui.com/en-US/light/components/form#API
 ¡OJO! Pero todas las reglas vienen en realidad de otra librería llamada "async-validator" que es la que realmente valida los datos: https://github.com/yiminghe/async-validator */
 const rules: FormRules = {
@@ -76,7 +77,7 @@ function handleSubmit() {
   formRef.value?.validate(async (errors) => {
     if (!errors) {
       const response = await login({ email: form.value.email, password: form.value.password });
-      console.log(response);
+      router.push({ name: "home" });
     }
   });
 }

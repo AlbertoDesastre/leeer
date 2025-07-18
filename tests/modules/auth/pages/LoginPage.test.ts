@@ -1,18 +1,19 @@
 import { vi } from "vitest";
 
 import LoginPage from "../../../../src/modules/auth/pages/LoginPage.vue";
-import { mount } from "@vue/test-utils";
-import { RouterLink } from "vue-router";
+import { DOMWrapper, flushPromises, mount } from "@vue/test-utils";
 
 // mock the vue router to check redirections
 const mockRouter = { push: vi.fn(), replace: vi.fn(), go: vi.fn() };
+const mockRoute = { name: "" };
 vi.mock("vue-router", () => ({
   useRouter: () => mockRouter,
-  useRoute: () => ({ name: "home" }),
+  useRoute: () => mockRoute,
 }));
-
+// mock useAuth()
+const mockUseAuth = { login: vi.fn(), register: vi.fn(), error: vi.fn() };
 vi.mock("../../../../src/modules/auth/composables/useAuth", () => ({
-  useAuth: () => ({ login: () => vi.fn(), register: () => vi.fn(), error: () => "texto de error" }),
+  useAuth: () => mockUseAuth,
 }));
 
 describe("<LoginPage/>", () => {
@@ -67,19 +68,26 @@ describe("<LoginPage/>", () => {
     expect(passwordError?.exists()).toBeFalsy();
   });
 
-  /*   test("should call login method on submit if there were no errors", () => {
+  test("should call redirect to home after making a succesful login", async () => {
+    // TODO: Mockear el valor retornado de "login" para que sea un poco más realista el test
     const wrapper = mount(LoginPage);
-    const emailInput = wrapper.find("input[placeholder='Introduce tu email']");
-    const passwordInput = wrapper.find("input[placeholder='Introduce tu contraseña']");
-    // check inputs existence first
-    expect(emailInput.exists()).toBeTruthy();
-    expect(passwordInput.exists()).toBeTruthy();
+    const email = wrapper.find("input[placeholder='Introduce tu email']");
+    const password = wrapper.find("input[placeholder='Introduce tu contraseña']");
+    const submit = wrapper
+      .findAll("span.n-button__content")
+      .find((span) => span.text() === "Iniciar sesión") as DOMWrapper<Element>;
 
-    // now the real test
-    emailInput.setValue(validEmail);
-    passwordInput.setValue(validPassword);
+    email.setValue(validEmail);
+    password.setValue(validPassword);
+    submit.trigger("click");
+    await flushPromises(); // this line resolves all promises immediately. This is good since I depend on "login", which has a fetch, to end it's promises
+
+    expect(submit.exists()).toBeTruthy();
+    expect(mockUseAuth.login).toBeCalledTimes(1);
+    expect(mockRouter.push).toBeCalledTimes(1);
+    expect(mockRouter.push).toBeCalledWith({ name: "home" });
   });
- */
+
   test("should do a redirection to another page if Login was succesful", () => {
     return true;
   });
