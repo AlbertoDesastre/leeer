@@ -2,6 +2,7 @@ import { vi } from "vitest";
 
 import LoginPage from "../../../../src/modules/auth/pages/LoginPage.vue";
 import { DOMWrapper, flushPromises, mount } from "@vue/test-utils";
+import { ref } from "vue";
 
 // mock the vue router to check redirections
 const mockRouter = { push: vi.fn(), replace: vi.fn(), go: vi.fn() };
@@ -11,10 +12,11 @@ vi.mock("vue-router", () => ({
   useRoute: () => mockRoute,
 }));
 // mock useAuth()
+const mockError = ref({ message: "", error: "", statusCode: 0 }); // to test real reactivity it's not enough to have a variable and change the value inside a test, but to have
 const mockUseAuth = {
   login: vi.fn(),
   register: vi.fn(),
-  error: { message: "", error: "", statusCode: 0 },
+  error: mockError,
 };
 vi.mock("../../../../src/modules/auth/composables/useAuth", () => ({
   useAuth: () => mockUseAuth,
@@ -23,11 +25,6 @@ vi.mock("../../../../src/modules/auth/composables/useAuth", () => ({
 describe("<LoginPage/>", () => {
   const validEmail = "myemail@gmail.com";
   const validPassword = "mysupEr_password!";
-  const apiErrorObject = {
-    message: "El email enviado es incorrecto. Verifique que el correo está bien.",
-    error: "Unauthorized",
-    statusCode: 401,
-  };
 
   test("should show and hide error messages after triggering blurr when input is invalid", async () => {
     const wrapper = mount(LoginPage);
@@ -108,14 +105,20 @@ describe("<LoginPage/>", () => {
 
     email.setValue(validEmail);
     password.setValue(validPassword);
+    mockUseAuth.login.mockImplementationOnce(() => {
+      mockError.value = {
+        message: "El email enviado es incorrecto. Verifique que el correo está bien.",
+        error: "Unauthorized",
+        statusCode: 401,
+      };
+      return null;
+    });
     await submit.trigger("click");
     await flushPromises();
-    mockUseAuth.error = apiErrorObject;
 
     expect(mockUseAuth.login).toBeCalledTimes(1);
-    const error = wrapper
-      .findAll("div.n-alert-body__content")
-      .find((div) => div.text() === mockUseAuth.error.message);
+    const error = wrapper.find("div.n-alert-body__content");
+    console.log(error.text());
     expect(error?.exists()).toBeTruthy();
   });
 });
