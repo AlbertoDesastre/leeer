@@ -87,11 +87,10 @@ async function handleSubmit() {
 
   if (isFormValid) {
     const result = await login({ email: form.value.email, password: form.value.password });
+    // si result === null significa que hubo un error. Esto lo actualiza useAuth() solo
     if (result !== null) {
-      console.log(result);
       router.push({ name: "home" });
     }
-    console.log("La API funcionó y te devolvió un error!");
   }
 }
 </script>

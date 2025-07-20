@@ -1,7 +1,7 @@
 import { vi } from "vitest";
 
 import LoginPage from "../../../../src/modules/auth/pages/LoginPage.vue";
-import { DOMWrapper, flushPromises, mount } from "@vue/test-utils";
+import { DOMWrapper, flushPromises, mount, VueWrapper } from "@vue/test-utils";
 import { ref } from "vue";
 
 // mock the vue router to check redirections
@@ -25,12 +25,42 @@ vi.mock("../../../../src/modules/auth/composables/useAuth", () => ({
 describe("<LoginPage/>", () => {
   const validEmail = "myemail@gmail.com";
   const validPassword = "mysupEr_password!";
+  let wrapper: VueWrapper;
+  let email: DOMWrapper<Element>;
+  let password: DOMWrapper<Element>;
+  let submit: DOMWrapper<Element>;
+  let error: DOMWrapper<Element>;
+
+  // Helpers functions
+  const fillForm = async (email: DOMWrapper<Element>, password: DOMWrapper<Element>) => {
+    await email.setValue(validEmail);
+    await password.setValue(validPassword);
+  };
+  const submitForm = async () => {
+    await submit.trigger("click");
+    await flushPromises(); // this line resolves all promises immediately. This is good since I depend on "login", which has a fetch, to end it's promises
+  };
+  const clickAndBlurr = async (element: DOMWrapper<Element>) => {
+    await element.trigger("click");
+    await element.trigger("blur");
+  };
+
+  // mounts and searchs for all relevant DOM Elements
+  beforeEach(() => {
+    wrapper = mount(LoginPage);
+
+    email = wrapper.find("input[placeholder='Introduce tu email']");
+    password = wrapper.find("input[placeholder='Introduce tu contraseña']");
+    submit = wrapper
+      .findAll("span.n-button__content")
+      .find((span) => span.text() === "Iniciar sesión") as DOMWrapper<Element>;
+    error = wrapper.find("div.n-alert-body__content");
+
+    vi.clearAllMocks();
+  });
 
   test("should show and hide error messages after triggering blurr when input is invalid", async () => {
-    const wrapper = mount(LoginPage);
-
     // obtain the EMAIL input, place invalid data and blur
-    const email = wrapper.find("input[placeholder='Introduce tu email']");
     await email.setValue("ifgewiogbew");
     await email.trigger("blur");
 
@@ -38,6 +68,7 @@ describe("<LoginPage/>", () => {
     let emailError = wrapper
       .findAll("div.n-form-item-feedback__line")
       .find((div) => div.text() === "Introduce un email válido");
+
     expect(emailError?.exists()).toBeTruthy();
     expect(emailError?.text()).toBe("Introduce un email válido");
 
@@ -52,9 +83,7 @@ describe("<LoginPage/>", () => {
     expect(emailError?.exists()).toBeFalsy();
 
     // obtain the PASSWORD input, place invalid data and blur
-    const password = wrapper.find("input[placeholder='Introduce tu contraseña']");
-    await password.trigger("click");
-    await password.trigger("blur");
+    await clickAndBlurr(password);
 
     // an error should appear after blur
     let passwordError = wrapper
@@ -75,17 +104,8 @@ describe("<LoginPage/>", () => {
   });
 
   test("should call redirect to home after making a succesful login", async () => {
-    const wrapper = mount(LoginPage);
-    const email = wrapper.find("input[placeholder='Introduce tu email']");
-    const password = wrapper.find("input[placeholder='Introduce tu contraseña']");
-    const submit = wrapper
-      .findAll("span.n-button__content")
-      .find((span) => span.text() === "Iniciar sesión") as DOMWrapper<Element>;
-
-    email.setValue(validEmail);
-    password.setValue(validPassword);
-    submit.trigger("click");
-    await flushPromises(); // this line resolves all promises immediately. This is good since I depend on "login", which has a fetch, to end it's promises
+    await fillForm(email, password);
+    await submitForm();
 
     expect(submit.exists()).toBeTruthy();
     expect(mockUseAuth.login).toBeCalledTimes(1);
@@ -94,17 +114,7 @@ describe("<LoginPage/>", () => {
   });
 
   test("should display an error message if login threw an error", async () => {
-    vi.clearAllMocks();
-
-    const wrapper = mount(LoginPage);
-    const email = wrapper.find("input[placeholder='Introduce tu email']");
-    const password = wrapper.find("input[placeholder='Introduce tu contraseña']");
-    const submit = wrapper
-      .findAll("span.n-button__content")
-      .find((span) => span.text() === "Iniciar sesión") as DOMWrapper<Element>;
-
-    email.setValue(validEmail);
-    password.setValue(validPassword);
+    await fillForm(email, password);
     mockUseAuth.login.mockImplementationOnce(() => {
       mockError.value = {
         message: "El email enviado es incorrecto. Verifique que el correo está bien.",
@@ -113,12 +123,16 @@ describe("<LoginPage/>", () => {
       };
       return null;
     });
-    await submit.trigger("click");
-    await flushPromises();
+    await submitForm();
+
+    // error instance is not the same anymore after re-rendering the wrapper so it has to be found again
+    error = wrapper.find("div.n-alert-body__content");
 
     expect(mockUseAuth.login).toBeCalledTimes(1);
-    const error = wrapper.find("div.n-alert-body__content");
-    console.log(error.text());
     expect(error?.exists()).toBeTruthy();
+    expect(error?.text()).toContain(
+      "El email enviado es incorrecto. Verifique que el correo está bien."
+    );
+    expect(mockRouter.push).not.toHaveBeenCalled();
   });
 });
