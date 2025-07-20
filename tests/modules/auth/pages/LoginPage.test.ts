@@ -11,7 +11,11 @@ vi.mock("vue-router", () => ({
   useRoute: () => mockRoute,
 }));
 // mock useAuth()
-const mockUseAuth = { login: vi.fn(), register: vi.fn(), error: vi.fn() };
+const mockUseAuth = {
+  login: vi.fn(),
+  register: vi.fn(),
+  error: { message: "", error: "", statusCode: 0 },
+};
 vi.mock("../../../../src/modules/auth/composables/useAuth", () => ({
   useAuth: () => mockUseAuth,
 }));
@@ -19,6 +23,11 @@ vi.mock("../../../../src/modules/auth/composables/useAuth", () => ({
 describe("<LoginPage/>", () => {
   const validEmail = "myemail@gmail.com";
   const validPassword = "mysupEr_password!";
+  const apiErrorObject = {
+    message: "El email enviado es incorrecto. Verifique que el correo está bien.",
+    error: "Unauthorized",
+    statusCode: 401,
+  };
 
   test("should show and hide error messages after triggering blurr when input is invalid", async () => {
     const wrapper = mount(LoginPage);
@@ -69,7 +78,6 @@ describe("<LoginPage/>", () => {
   });
 
   test("should call redirect to home after making a succesful login", async () => {
-    // TODO: Mockear el valor retornado de "login" para que sea un poco más realista el test
     const wrapper = mount(LoginPage);
     const email = wrapper.find("input[placeholder='Introduce tu email']");
     const password = wrapper.find("input[placeholder='Introduce tu contraseña']");
@@ -88,7 +96,26 @@ describe("<LoginPage/>", () => {
     expect(mockRouter.push).toBeCalledWith({ name: "home" });
   });
 
-  test("should do a redirection to another page if Login was succesful", () => {
-    return true;
+  test("should display an error message if login threw an error", async () => {
+    vi.clearAllMocks();
+
+    const wrapper = mount(LoginPage);
+    const email = wrapper.find("input[placeholder='Introduce tu email']");
+    const password = wrapper.find("input[placeholder='Introduce tu contraseña']");
+    const submit = wrapper
+      .findAll("span.n-button__content")
+      .find((span) => span.text() === "Iniciar sesión") as DOMWrapper<Element>;
+
+    email.setValue(validEmail);
+    password.setValue(validPassword);
+    await submit.trigger("click");
+    await flushPromises();
+    mockUseAuth.error = apiErrorObject;
+
+    expect(mockUseAuth.login).toBeCalledTimes(1);
+    const error = wrapper
+      .findAll("div.n-alert-body__content")
+      .find((div) => div.text() === mockUseAuth.error.message);
+    expect(error?.exists()).toBeTruthy();
   });
 });

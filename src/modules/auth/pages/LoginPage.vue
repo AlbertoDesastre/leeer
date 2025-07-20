@@ -42,20 +42,23 @@
       </article>
     </section>
   </section>
+  <n-alert v-if="error.message" type="error" :title="error.error" :closable="true"
+    >{{ error.message }}
+  </n-alert>
 </template>
 
 <script setup lang="ts">
 // Formulario de registro de usuario con avatar, nickname, descripción, email y doble contraseña
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import { NForm, NFormItem, NInput, NButton, NAvatar } from "naive-ui";
+import { NForm, NFormItem, NInput, NButton, NAvatar, NAlert } from "naive-ui";
 import type { FormInst, FormRules } from "naive-ui";
 
 import { useAuth } from "../composables/useAuth";
 import fallback_icon from "../../../../imgs/gato-detective.png";
 import personas_escribiendo from "../../../../imgs/personas-escribiendo.png";
 
-const { login, register, error } = useAuth();
+let { login, error } = useAuth();
 
 const formRef = ref<FormInst | null>(null);
 // Estos son los valores del formulario, que inicializo por defecto
@@ -72,14 +75,24 @@ const rules: FormRules = {
   password: [{ required: true, message: "La contraseña es obligatoria", trigger: "blur" }],
 };
 
-function handleSubmit() {
-  /* El "formRef" tiene el tipo FormInst. Ese tipo incorpora un método "validate" incrustado a cada valor. Por eso se puede usar esta función aquí, me la proveé Nativeui */
-  formRef.value?.validate(async (errors) => {
-    if (!errors) {
-      const response = await login({ email: form.value.email, password: form.value.password });
+async function handleSubmit() {
+  // Creo y hago await inmediatamente a la promsea, de tal forma que me queda una constante booleana al ejecutar la función.
+  const isFormValid: Boolean = await new Promise((resolve) => {
+    /* El "formRef" tiene el tipo FormInst. Ese tipo incorpora un método "validate" incrustado a cada valor. Por eso se puede usar esta función aquí, me la proveé Nativeui */
+    formRef.value?.validate((errors) => {
+      // el método validate de async-validator devuelve una promesa!
+      resolve(!errors); // "errors" del callback es un booleano. Si NO hay errores (false) significa entonces que el formulario es VÁLIDO, por lo tanto resuelvo con un !errors para indicar "true"
+    });
+  });
+
+  if (isFormValid) {
+    const result = await login({ email: form.value.email, password: form.value.password });
+    if (result !== null) {
+      console.log(result);
       router.push({ name: "home" });
     }
-  });
+    console.log("La API funcionó y te devolvió un error!");
+  }
 }
 </script>
 
