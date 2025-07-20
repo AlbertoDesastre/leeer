@@ -1,8 +1,7 @@
 import { vi } from "vitest";
-
-import LoginPage from "../../../../src/modules/auth/pages/LoginPage.vue";
-import { DOMWrapper, flushPromises, mount, VueWrapper } from "@vue/test-utils";
 import { ref } from "vue";
+import { DOMWrapper, flushPromises, mount, VueWrapper } from "@vue/test-utils";
+import LoginPage from "../../../../src/modules/auth/pages/LoginPage.vue";
 
 // mock the vue router to check redirections
 const mockRouter = { push: vi.fn(), replace: vi.fn(), go: vi.fn() };
@@ -47,7 +46,11 @@ describe("<LoginPage/>", () => {
 
   // mounts and searchs for all relevant DOM Elements
   beforeEach(() => {
-    wrapper = mount(LoginPage);
+    wrapper = mount(LoginPage, {
+      global: {
+        stubs: ["RouterLink"],
+      },
+    });
 
     email = wrapper.find("input[placeholder='Introduce tu email']");
     password = wrapper.find("input[placeholder='Introduce tu contraseña']");
