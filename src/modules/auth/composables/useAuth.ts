@@ -44,6 +44,7 @@ export function useAuth() {
       });
 
       const data = await response.json();
+
       // Un !response.ok es un error proveniente de mi server, que son los errores con código 30X, 40X, 50X, etc.
       if (!response.ok) {
         error.value = { message: data.message, error: data.error, statusCode: data.status };
@@ -77,5 +78,5 @@ export function useAuth() {
     error.value = { message: "", error: "", statusCode: 0 };
   };
 
-  return { login, register, error };
+  return { login, register, isLoading, error };
 }

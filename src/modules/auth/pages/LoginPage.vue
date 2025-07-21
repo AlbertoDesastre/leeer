@@ -41,8 +41,15 @@
         <p>compártela con el mundo</p>
       </article>
     </section>
+
+    <!-- Transition is a Vue component for this kind of situations -->
+    <Transition v-if="isLoading">
+      <p class="loading">CARGANDO <span class="dots"></span></p>
+    </Transition>
   </section>
-  <n-alert v-if="error.message" type="error" :title="error.error" :closable="true"
+
+  <!-- Alerta si hay error  v-if="error.message"  -->
+  <n-alert v-if="error.message" type="error" class="error-tab" :title="error.error" :closable="true"
     >{{ error.message }}
   </n-alert>
 </template>
@@ -58,7 +65,7 @@ import { useAuth } from "../composables/useAuth";
 import fallback_icon from "../../../../imgs/gato-detective.png";
 import personas_escribiendo from "../../../../imgs/personas-escribiendo.png";
 
-let { login, error } = useAuth();
+let { login, isLoading, error } = useAuth();
 
 const formRef = ref<FormInst | null>(null);
 // Estos son los valores del formulario, que inicializo por defecto
@@ -156,6 +163,64 @@ async function handleSubmit() {
 
 .form-banner-container article p {
   font-size: 16px;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.8s ease;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+.fade-enter-to,
+.fade-leave-from {
+  opacity: 1;
+}
+
+.loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 0.7rem 1.7rem;
+  border-radius: 4px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  font-weight: bold;
+  font-size: 1.1rem;
+  z-index: 10;
+}
+
+.dots::after {
+  content: "";
+  display: inline-block;
+  width: 1em;
+  text-align: left;
+  animation: dots 1.2s steps(4, end) infinite;
+}
+
+@keyframes dots {
+  0% {
+    content: "";
+  }
+  25% {
+    content: ".";
+  }
+  50% {
+    content: "..";
+  }
+  75% {
+    content: "...";
+  }
+  100% {
+    content: "";
+  }
+}
+
+.error-tab {
+  margin: 0 auto;
+  max-width: 550px;
 }
 
 .close-button {

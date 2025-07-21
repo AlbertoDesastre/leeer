@@ -2,6 +2,7 @@ import { vi } from "vitest";
 import { ref } from "vue";
 import { DOMWrapper, flushPromises, mount, VueWrapper } from "@vue/test-utils";
 import LoginPage from "../../../../src/modules/auth/pages/LoginPage.vue";
+import naive from "naive-ui";
 
 // mock the vue router to check redirections
 const mockRouter = { push: vi.fn(), replace: vi.fn(), go: vi.fn() };
@@ -16,6 +17,7 @@ const mockUseAuth = {
   login: vi.fn(),
   register: vi.fn(),
   error: mockError,
+  isLoading: ref(false),
 };
 vi.mock("../../../../src/modules/auth/composables/useAuth", () => ({
   useAuth: () => mockUseAuth,
@@ -137,5 +139,20 @@ describe("<LoginPage/>", () => {
       "El email enviado es incorrecto. Verifique que el correo está bien."
     );
     expect(mockRouter.push).not.toHaveBeenCalled();
+  });
+
+  test("should show a loader when 'login' is performing an action", async () => {
+    await fillForm(email, password);
+    mockUseAuth.isLoading.value = true;
+    await submit.trigger("click");
+    let loading = wrapper.find("p.loading");
+
+    expect(loading?.exists()).toBeTruthy();
+    expect(loading?.text()).toContain("CARGANDO");
+
+    mockUseAuth.isLoading.value = false;
+    await wrapper.vm.$nextTick(); // is not enough to change the value of a ref, it must be re-rendered in the component to reflect the new state. vm.$nextTick() does that
+    loading = wrapper.find("p.loading"); // and to search *again* for the element
+    expect(loading?.exists()).toBeFalsy();
   });
 });
