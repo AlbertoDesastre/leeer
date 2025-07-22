@@ -46,7 +46,12 @@ export function useAuth() {
 
       // Un !response.ok es un error proveniente de mi server, que son los errores con código 30X, 40X, 50X, etc.
       if (!response.ok) {
-        error.value = { message: data.message, error: data.error, statusCode: data.status };
+        error.value = {
+          error: data.error,
+          message: makeApiErrorFriendly({ error: data.error, message: data.message }),
+          statusCode: data.status,
+        };
+
         return null;
       } else {
         return data as LoginResponse;
@@ -61,7 +66,7 @@ export function useAuth() {
       error.value = {
         message: "Hubo un error inesperado. Inténtelo de nuevo más tarde",
         error: "Error en la red.",
-        statusCode: 0,
+        statusCode: 500,
       };
       console.error("Error de red: " + err);
       return null;
@@ -89,11 +94,16 @@ export function useAuth() {
         body: JSON.stringify(registerDTO),
       });
 
-      const data = await response.json();
+      let data = await response.json();
 
       // Un !response.ok es un error proveniente de mi server, que son los errores con código 30X, 40X, 50X, etc.
       if (!response.ok) {
-        error.value = { message: data.message, error: data.error, statusCode: data.status };
+        error.value = {
+          error: data.error,
+          message: makeApiErrorFriendly({ error: data.error, message: data.message }),
+          statusCode: data.status,
+        };
+
         return null;
       } else {
         return data as RegisterResponse;
@@ -120,6 +130,33 @@ export function useAuth() {
   // el error se tiene que limpiar cada vez que se haga una nueva llamada. Puede que la primera vez le diese un error y ahora lo esté reintentando nuevamente. Me gusta ponerlo en su propia función porque es más rápido de leer arriba.
   const cleanError = () => {
     error.value = { message: "", error: "", statusCode: 0 };
+  };
+
+  const makeApiErrorFriendly = ({ error, message }: { error: string; message: string }): string => {
+    switch (error) {
+      case "Unauthorized":
+        if (
+          message.includes("El email enviado es incorrecto") ||
+          message.includes("contraseña no es correcta.")
+        ) {
+          return "El correo o la contraseña no son correctos.";
+        }
+        break;
+
+      case "Bad Request":
+        if (message.includes("Duplicate entry") && message.includes("for key 'users.email'")) {
+          return "El email ya está en uso. ¿Se te olvidó la contraseña?";
+        }
+        if (message.includes("Duplicate entry") && message.includes("for key 'users.nickname'")) {
+          return "Ese nickname ya tiene dueñ@. ¡Prueba con otro!";
+        }
+        break;
+
+      case "Internal Server Error":
+        return "Ha ocurrido un error inesperado. Por favor, intenta de nuevo más tarde.";
+    }
+
+    return message; // mensaje original como fallback
   };
 
   return { login, register, isLoading, error };
