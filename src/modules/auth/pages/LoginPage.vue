@@ -49,7 +49,7 @@
   </section>
 
   <!-- Alerta si hay error  v-if="error.message"  -->
-  <n-alert v-if="error.message" type="error" class="error-tab" :title="error.error" :closable="true"
+  <n-alert v-if="error.message" type="error" class="error-tab" :title="'¡Vaya!'" :closable="true"
     >{{ error.message }}
   </n-alert>
 </template>
