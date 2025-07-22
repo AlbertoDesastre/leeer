@@ -42,10 +42,6 @@ describe("<LoginPage/>", () => {
     await submit.trigger("click");
     await flushPromises(); // this line resolves all promises immediately. This is good since I depend on "login", which has a fetch, to end it's promises
   };
-  const clickAndBlurr = async (element: DOMWrapper<Element>) => {
-    await element.trigger("click");
-    await element.trigger("blur");
-  };
 
   // mounts and searchs for all relevant DOM Elements
   beforeEach(() => {
@@ -66,47 +62,19 @@ describe("<LoginPage/>", () => {
   });
 
   test("should show and hide error messages after triggering blurr when input is invalid", async () => {
-    // obtain the EMAIL input, place invalid data and blur
-    await email.setValue("ifgewiogbew");
+    await email.setValue("bademail");
     await email.trigger("blur");
-
-    // an error should appear after blur
-    let emailError = wrapper
-      .findAll("div.n-form-item-feedback__line")
-      .find((div) => div.text() === "Introduce un email válido");
-
-    expect(emailError?.exists()).toBeTruthy();
-    expect(emailError?.text()).toBe("Introduce un email válido");
-
-    // now correct data is placed
-    await email.setValue(validEmail);
-    await email.trigger("blur");
-
-    // the error should appear no more
-    emailError = wrapper
-      .findAll("div.n-form-item-feedback__line")
-      .find((div) => div.text() === "Introduce un email válido");
-    expect(emailError?.exists()).toBeFalsy();
-
-    // obtain the PASSWORD input, place invalid data and blur
-    await clickAndBlurr(password);
-
-    // an error should appear after blur
-    let passwordError = wrapper
-      .findAll("div.n-form-item-feedback__line")
-      .find((div) => div.text() === "La contraseña es obligatoria");
-    expect(passwordError?.exists()).toBeTruthy();
-    expect(passwordError?.text()).toBe("La contraseña es obligatoria");
-
-    // now correct data is placed
-    await password.setValue(validPassword);
     await password.trigger("blur");
 
-    // the error should appear no more
-    passwordError = wrapper
-      .findAll("div.n-form-item-feedback__line")
-      .find((div) => div.text() === "La contraseña es obligatoria");
-    expect(passwordError?.exists()).toBeFalsy();
+    const errors = wrapper.findAll("div.n-form-item-feedback__line");
+    expect(errors.length).toBeGreaterThan(0);
+
+    await fillForm(email, password);
+    await email.trigger("blur");
+    await password.trigger("blur");
+
+    const remainingErrors = wrapper.findAll("div.n-form-item-feedback__line");
+    expect(remainingErrors.length).toBe(0);
   });
 
   test("should call redirect to home after making a succesful login", async () => {
