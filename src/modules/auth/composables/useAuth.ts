@@ -1,19 +1,14 @@
 import { ref } from "vue";
+import type { ApiError } from "../../common/types";
 
-interface ApiError {
-  message: string;
-  error: string;
-  statusCode: number;
+interface LoginDTO {
+  email: string;
+  password: string;
 }
 
 interface LoginResponse {
   email: string;
   token: string;
-}
-
-interface LoginCredentials {
-  email: string;
-  password: string;
 }
 
 interface RegisterDTO {
@@ -24,7 +19,7 @@ interface RegisterDTO {
   password: string;
 }
 
-interface RegisterBody extends RegisterDTO {
+interface RegisterForm extends RegisterDTO {
   passwordRepeat: string;
 }
 
@@ -36,7 +31,7 @@ export function useAuth() {
   const error = ref<ApiError>({ message: "", error: "", statusCode: 0 });
   const isLoading = ref(false);
 
-  const login = async (credentials: LoginCredentials) => {
+  const login = async (credentials: LoginDTO) => {
     isLoading.value = true;
     cleanError();
 
@@ -75,16 +70,16 @@ export function useAuth() {
     }
   };
 
-  const register = async (registerBody: RegisterBody) => {
+  const register = async (registerForm: RegisterForm) => {
     isLoading.value = true;
     cleanError();
 
     const registerDTO: RegisterDTO = {
-      nickname: registerBody.nickname,
-      email: registerBody.email,
-      profile_picture: registerBody.profile_picture,
-      description: registerBody.description,
-      password: registerBody.password,
+      nickname: registerForm.nickname,
+      email: registerForm.email,
+      profile_picture: registerForm.profile_picture,
+      description: registerForm.description,
+      password: registerForm.password,
     };
 
     try {
