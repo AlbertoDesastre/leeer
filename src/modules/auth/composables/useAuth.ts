@@ -16,7 +16,7 @@ interface LoginCredentials {
   password: string;
 }
 
-interface RegisterBody {
+interface RegisterDTO {
   nickname: string;
   email: string;
   profile_picture: string;
@@ -24,7 +24,11 @@ interface RegisterBody {
   password: string;
 }
 
-interface RegisterResponse extends Omit<RegisterBody, "password"> {
+interface RegisterBody extends RegisterDTO {
+  passwordRepeat: string;
+}
+
+interface RegisterResponse extends Omit<RegisterDTO, "password"> {
   token: string;
 }
 
@@ -71,7 +75,52 @@ export function useAuth() {
     }
   };
 
-  const register = () => {};
+  const register = async (registerBody: RegisterBody) => {
+    isLoading.value = true;
+    cleanError();
+
+    const registerDTO: RegisterDTO = {
+      nickname: registerBody.nickname,
+      email: registerBody.email,
+      profile_picture: registerBody.profile_picture,
+      description: registerBody.description,
+      password: registerBody.password,
+    };
+
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/register`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(registerDTO),
+      });
+
+      const data = await response.json();
+
+      // Un !response.ok es un error proveniente de mi server, que son los errores con código 30X, 40X, 50X, etc.
+      if (!response.ok) {
+        error.value = { message: data.message, error: data.error, statusCode: data.status };
+        return null;
+      } else {
+        return data as RegisterResponse;
+      }
+    } catch (err: any) {
+      // Ejemplos que van al catch:
+      // - No hay internet
+      // - El servidor está caído (no responde)
+      // - DNS no resuelve el dominio
+      // - El JSON está malformado
+      // - Timeout de conexión
+      error.value = {
+        message: "Hubo un error inesperado. Inténtelo de nuevo más tarde",
+        error: "Error en la red.",
+        statusCode: 0,
+      };
+      console.error("Error de red: " + err);
+      return null;
+    } finally {
+      isLoading.value = false;
+    }
+  };
 
   // el error se tiene que limpiar cada vez que se haga una nueva llamada. Puede que la primera vez le diese un error y ahora lo esté reintentando nuevamente. Me gusta ponerlo en su propia función porque es más rápido de leer arriba.
   const cleanError = () => {

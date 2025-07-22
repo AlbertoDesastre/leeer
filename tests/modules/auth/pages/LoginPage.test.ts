@@ -11,6 +11,7 @@ vi.mock("vue-router", () => ({
   useRouter: () => mockRouter,
   useRoute: () => mockRoute,
 }));
+
 // mock useAuth()
 const mockError = ref({ message: "", error: "", statusCode: 0 }); // to test real reactivity it's not enough to have a variable and change the value inside a test, but to have
 const mockUseAuth = {
