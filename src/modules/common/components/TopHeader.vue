@@ -12,7 +12,7 @@
       <div class="main-navigation">
         <RouterLink :to="{ name: 'home' }">Home</RouterLink>
         <RouterLink :to="{ name: 'desk' }" tabindex="0">Escritorio</RouterLink>
-        <nav v-if="!hideExplore" class="dropdown-wrapper">
+        <nav v-if="isInDeskPage" class="dropdown-wrapper">
           <!-- tabindex me permite desplegar el dropdown a conveniencia al hacer click en explorar -->
           <p tabindex="0">Explorar</p>
           <ul>
@@ -44,7 +44,7 @@ const route = useRoute();
 const term = ref("");
 
 // Oculta el botón de explorar si estamos en el escritorio
-const hideExplore = computed(() => route.name === "desk");
+const isInDeskPage = computed(() => route.name !== "desk");
 
 async function search() {
   router.push({ name: "creations-search", query: { search: term.value } });

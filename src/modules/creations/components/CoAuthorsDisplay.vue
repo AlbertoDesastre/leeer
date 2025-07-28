@@ -1,7 +1,7 @@
 <template>
   <article class="co-authors-display">
     <img
-      v-for="(img, index) in images"
+      v-for="(img, index) in props.images"
       :key="index"
       :class="'coauthor-' + (index + 1)"
       :src="img"
