@@ -4,7 +4,7 @@ import { useLocalStorage } from "@vueuse/core";
 
 import type { BasicUser } from "../types";
 
-export const useAuthStore = defineStore("auth", () => {
+export const useUserStore = defineStore("auth", () => {
   // NOTA 1: Hay que inicializar el estado siempre, aunque sea vacío. Cuando consuma este dato debo hacer la comprobación de si es NULL o no y hacer el return explícito.
   // NOTA 2: Las referencias no deberían ser editables desde fuera. Para leerlas o manipularlas hay que hacer sus funciones dedicadas.
   const user = ref(useLocalStorage<BasicUser>("user", { email: "", token: "" }));
