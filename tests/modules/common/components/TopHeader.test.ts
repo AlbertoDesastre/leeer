@@ -1,4 +1,4 @@
-import { mount } from "@vue/test-utils";
+import { mount, VueWrapper } from "@vue/test-utils";
 
 import TopHeader from "../../../../src/modules/common/components/TopHeader.vue";
 import { useRoute } from "vue-router";
@@ -14,9 +14,17 @@ vi.mock("vue-router", () => ({
 // explanation on how I know how mocking works: https://vitest.dev/api/vi.html#vi-mock
 
 describe("<TopHeader/>", () => {
-  test("should hide search input if user is in the route 'desk'", () => {
-    const wrapper = mount(TopHeader);
+  let wrapper: VueWrapper;
 
+  beforeEach(() => {
+    wrapper = mount(TopHeader, {
+      global: {
+        stubs: ["RouterLink"],
+      },
+    });
+  });
+
+  test("should hide search input if user is in the route 'desk'", () => {
     expect(wrapper.find("nav.dropdown-wrapper").exists()).toBeFalsy();
     expect(useRoute().name).toBe(mockRoute.name);
   });
@@ -25,7 +33,11 @@ describe("<TopHeader/>", () => {
     let otherRoute = "other-page";
     mockRoute.name = otherRoute;
     // careful!! I have to mount the component AFTER changing the route name since once it mount's it will pick up the one that was instanciated before.
-    const wrapper = mount(TopHeader);
+    wrapper = mount(TopHeader, {
+      global: {
+        stubs: ["RouterLink"],
+      },
+    });
 
     await new Promise((r) => setTimeout(r, 200));
     expect(useRoute().name).toBe(otherRoute);

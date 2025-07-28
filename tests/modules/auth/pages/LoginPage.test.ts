@@ -1,8 +1,9 @@
 import { vi } from "vitest";
 import { ref } from "vue";
 import { DOMWrapper, flushPromises, mount, VueWrapper } from "@vue/test-utils";
+import { createPinia, setActivePinia } from "pinia";
+
 import LoginPage from "../../../../src/modules/auth/pages/LoginPage.vue";
-import naive from "naive-ui";
 
 // mock the vue router to check redirections
 const mockRouter = { push: vi.fn(), replace: vi.fn(), go: vi.fn() };
@@ -45,6 +46,9 @@ describe("<LoginPage/>", () => {
 
   // mounts and searchs for all relevant DOM Elements
   beforeEach(() => {
+    // This must be made in every component Pinia is being used or an error will be throw
+    setActivePinia(createPinia());
+
     wrapper = mount(LoginPage, {
       global: {
         stubs: ["RouterLink"],
