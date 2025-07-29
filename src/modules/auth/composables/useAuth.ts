@@ -2,6 +2,7 @@ import { ref } from "vue";
 import type { ApiError } from "../../common/types";
 import type { BasicUser } from "../types";
 
+// TODO: Eliminar email de la response de API y del Front.
 interface LoginDTO {
   email: string;
   password: string;

@@ -71,8 +71,10 @@ import { ref } from "vue";
 import fallback_icon from "../../../../imgs/gato-escritor.png";
 import { useAuth } from "../composables/useAuth";
 import { useRouter } from "vue-router";
+import { useUserStore } from "../store/user.store";
 
 const { register, error, isLoading } = useAuth();
+const userStore = useUserStore();
 const router = useRouter();
 const formRef = ref<FormInst | null>(null);
 // Estos son los valores del formulario, que inicializo por defecto
@@ -121,11 +123,19 @@ async function handleSubmit() {
   });
 
   if (isFormValid) {
-    const result = await register({ ...form.value });
+    const userData = await register({ ...form.value });
+
     // si result === null significa que hubo un error. Esto lo actualiza useAuth() solo
-    if (result !== null) {
-      router.push({ name: "home" });
+    if (userData === null) {
+      userStore.cleanUser();
+      return;
     }
+
+    userStore.setUser({
+      email: userData.email,
+      token: userData.token,
+    });
+    router.push({ name: "home" });
   }
 }
 </script>

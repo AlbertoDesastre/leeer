@@ -95,13 +95,15 @@ async function handleSubmit() {
 
   if (isFormValid) {
     const userData = await login({ email: form.value.email, password: form.value.password });
+
     // si result === null significa que hubo un error. Esto lo actualiza useAuth() solo
-    if (userData !== null) {
-      userStore.setUser(userData);
-      router.push({ name: "home" });
+    if (userData === null) {
+      userStore.cleanUser();
       return;
     }
-    userStore.cleanUser();
+
+    userStore.setUser(userData);
+    router.push({ name: "home" });
   }
 }
 </script>

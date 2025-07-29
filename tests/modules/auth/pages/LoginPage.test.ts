@@ -4,6 +4,7 @@ import { DOMWrapper, flushPromises, mount, VueWrapper } from "@vue/test-utils";
 import { createPinia, setActivePinia } from "pinia";
 
 import LoginPage from "../../../../src/modules/auth/pages/LoginPage.vue";
+import { useUserStore } from "../../../../src/modules/auth/store/user.store";
 
 // mock the vue router to check redirections
 const mockRouter = { push: vi.fn(), replace: vi.fn(), go: vi.fn() };
@@ -24,6 +25,10 @@ const mockUseAuth = {
 vi.mock("../../../../src/modules/auth/composables/useAuth", () => ({
   useAuth: () => mockUseAuth,
 }));
+
+// userStore
+const mockSetUser = vi.fn();
+const mockCleanUser = vi.fn();
 
 describe("<LoginPage/>", () => {
   const validEmail = "myemail@gmail.com";
@@ -48,6 +53,10 @@ describe("<LoginPage/>", () => {
   beforeEach(() => {
     // This must be made in every component Pinia is being used or an error will be throw
     setActivePinia(createPinia());
+
+    const userStore = useUserStore();
+    userStore.setUser = mockSetUser;
+    userStore.cleanUser = mockCleanUser;
 
     wrapper = mount(LoginPage, {
       global: {
@@ -91,8 +100,29 @@ describe("<LoginPage/>", () => {
     expect(mockRouter.push).toBeCalledWith({ name: "home" });
   });
 
-  test("should display an error message if login threw an error", async () => {
+  test("should save user information on localStorage after successful login", async () => {
+    // setup
+    const mockedUserData = { email: "validemail@mail.com", token: "supertoken" };
+    mockUseAuth.login.mockResolvedValueOnce(mockedUserData);
+
+    // action
     await fillForm(email, password);
+    await submitForm();
+
+    // login assert
+    expect(mockUseAuth.login).toBeCalledWith({ email: validEmail, password: validPassword });
+    expect(mockUseAuth.login).toBeCalledTimes(1);
+    // user store assert
+    expect(mockSetUser).toBeCalledTimes(1);
+    expect(mockSetUser).toBeCalledWith(mockedUserData);
+    // redirection
+    expect(mockRouter.push).toBeCalledTimes(1);
+    expect(mockRouter.push).toBeCalledWith({ name: "home" });
+    // after all succesful operations user should not be cleaned
+    expect(mockCleanUser).not.toBeCalled();
+  });
+
+  test("should not save user information or redirect if login failed", async () => {
     mockUseAuth.login.mockImplementationOnce(() => {
       mockError.value = {
         message: "El email enviado es incorrecto. Verifique que el correo está bien.",
@@ -101,17 +131,25 @@ describe("<LoginPage/>", () => {
       };
       return null;
     });
+    await fillForm(email, password);
     await submitForm();
 
     // error instance is not the same anymore after re-rendering the wrapper so it has to be found again
     error = wrapper.find("div.n-alert-body__content");
 
+    // assert: login was tried and error exists
     expect(mockUseAuth.login).toBeCalledTimes(1);
     expect(error?.exists()).toBeTruthy();
     expect(error?.text()).toContain(
       "El email enviado es incorrecto. Verifique que el correo está bien."
     );
+
+    // assert: no redirection or user information was saved
+    expect(mockSetUser).not.toBeCalled();
     expect(mockRouter.push).not.toHaveBeenCalled();
+
+    // assert: user cleanse was done
+    expect(mockCleanUser).toBeCalledTimes(1);
   });
 
   test("should show a loader when 'login' is performing an action", async () => {
