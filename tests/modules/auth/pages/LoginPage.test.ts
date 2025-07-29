@@ -1,34 +1,11 @@
+import { mockRouter, mockUseAuth, mockSetUser, mockCleanUser, mockError } from "../../../__mocks__/auth";
+
 import { vi } from "vitest";
-import { ref } from "vue";
 import { DOMWrapper, flushPromises, mount, VueWrapper } from "@vue/test-utils";
 import { createPinia, setActivePinia } from "pinia";
 
 import LoginPage from "../../../../src/modules/auth/pages/LoginPage.vue";
 import { useUserStore } from "../../../../src/modules/auth/store/user.store";
-
-// mock the vue router to check redirections
-const mockRouter = { push: vi.fn(), replace: vi.fn(), go: vi.fn() };
-const mockRoute = { name: "" };
-vi.mock("vue-router", () => ({
-  useRouter: () => mockRouter,
-  useRoute: () => mockRoute,
-}));
-
-// mock useAuth()
-const mockError = ref({ message: "", error: "", statusCode: 0 }); // to test real reactivity it's not enough to have a variable and change the value inside a test, but to have
-const mockUseAuth = {
-  login: vi.fn(),
-  register: vi.fn(),
-  error: mockError,
-  isLoading: ref(false),
-};
-vi.mock("../../../../src/modules/auth/composables/useAuth", () => ({
-  useAuth: () => mockUseAuth,
-}));
-
-// userStore
-const mockSetUser = vi.fn();
-const mockCleanUser = vi.fn();
 
 describe("<LoginPage/>", () => {
   const validEmail = "myemail@gmail.com";

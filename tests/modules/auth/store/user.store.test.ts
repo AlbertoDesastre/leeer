@@ -1,6 +1,6 @@
 import { createPinia, setActivePinia } from "pinia";
 import { useUserStore } from "../../../../src/modules/auth/store/user.store";
-import { fakeUser } from "../../mocks/auth/fake.user";
+import { fakeUser } from "../../../__mocks__/auth";
 
 describe("useUserStore", () => {
   beforeEach(() => {

@@ -1,31 +1,11 @@
+import { mockRouter, mockUseAuth, mockSetUser, mockCleanUser, mockError } from "../../../__mocks__/auth";
+
 import { vi } from "vitest";
-import { ref } from "vue";
 import { DOMWrapper, flushPromises, mount, VueWrapper } from "@vue/test-utils";
-import RegisterPage from "../../../../src/modules/auth/pages/RegisterPage.vue";
 import { setActivePinia, createPinia } from "pinia";
+
+import RegisterPage from "../../../../src/modules/auth/pages/RegisterPage.vue";
 import { useUserStore } from "../../../../src/modules/auth/store/user.store";
-
-// mock vue-router
-const mockRouter = { push: vi.fn(), replace: vi.fn(), go: vi.fn() };
-vi.mock("vue-router", () => ({
-  useRouter: () => mockRouter,
-}));
-
-// mock useAuth()
-const mockError = ref({ message: "", error: "", statusCode: 0 });
-const mockUseAuth = {
-  login: vi.fn(),
-  register: vi.fn(),
-  error: mockError,
-  isLoading: ref(false),
-};
-vi.mock("../../../../src/modules/auth/composables/useAuth", () => ({
-  useAuth: () => mockUseAuth,
-}));
-
-// userStore
-const mockSetUser = vi.fn();
-const mockCleanUser = vi.fn();
 
 describe("<RegisterPage/>", () => {
   const validNickname = "user123";
