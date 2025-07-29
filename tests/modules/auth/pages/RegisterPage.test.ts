@@ -1,25 +1,11 @@
+import { mockRouter, mockUseAuth, mockSetUser, mockCleanUser, mockError } from "../../../__mocks__/auth";
+
 import { vi } from "vitest";
-import { ref } from "vue";
 import { DOMWrapper, flushPromises, mount, VueWrapper } from "@vue/test-utils";
+import { setActivePinia, createPinia } from "pinia";
+
 import RegisterPage from "../../../../src/modules/auth/pages/RegisterPage.vue";
-
-// mock vue-router
-const mockRouter = { push: vi.fn(), replace: vi.fn(), go: vi.fn() };
-vi.mock("vue-router", () => ({
-  useRouter: () => mockRouter,
-}));
-
-// mock useAuth()
-const mockError = ref({ message: "", error: "", statusCode: 0 });
-const mockUseAuth = {
-  login: vi.fn(),
-  register: vi.fn(),
-  error: mockError,
-  isLoading: ref(false),
-};
-vi.mock("../../../../src/modules/auth/composables/useAuth", () => ({
-  useAuth: () => mockUseAuth,
-}));
+import { useUserStore } from "../../../../src/modules/auth/store/user.store";
 
 describe("<RegisterPage/>", () => {
   const validNickname = "user123";
@@ -50,6 +36,13 @@ describe("<RegisterPage/>", () => {
   };
 
   beforeEach(() => {
+    // This must be made in every component Pinia is being used or an error will be throw
+    setActivePinia(createPinia());
+
+    const userStore = useUserStore();
+    userStore.setUser = mockSetUser;
+    userStore.cleanUser = mockCleanUser;
+
     wrapper = mount(RegisterPage, {
       global: {
         stubs: ["RouterLink"],
@@ -88,19 +81,32 @@ describe("<RegisterPage/>", () => {
     expect(remainingErrors.length).toBe(0);
   });
 
-  test("should call register and redirect to home when success", async () => {
-    mockUseAuth.register.mockResolvedValueOnce({});
+  test("should save user information on localStorage after successful register", async () => {
+    // setup
+    const mockedUserData = { email: "newuser@mail.com", token: "validtoken123" };
+    mockUseAuth.register.mockResolvedValueOnce(mockedUserData);
+
     await fillForm();
     await submitForm();
 
+    // register assertions
     expect(mockUseAuth.register).toBeCalledTimes(1);
+
+    // store assertions
+    expect(mockSetUser).toBeCalledTimes(1);
+    expect(mockSetUser).toBeCalledWith(mockedUserData);
+
+    // redirection
     expect(mockRouter.push).toBeCalledWith({ name: "home" });
+
+    // user should not be cleaned
+    expect(mockCleanUser).not.toBeCalled();
   });
 
-  test("should show an error message if register throws", async () => {
+  test("should not save user and clean store if register fails", async () => {
     mockUseAuth.register.mockImplementationOnce(() => {
       mockError.value = {
-        message: "El usuario ya existe.",
+        message: "Ese email ya está en uso.",
         error: "Conflict",
         statusCode: 409,
       };
@@ -110,12 +116,20 @@ describe("<RegisterPage/>", () => {
     await fillForm();
     await submitForm();
 
-    // error instance is not the same anymore after re-rendering the wrapper so it has to be found again
+    // error re-render
     error = wrapper.find(".error-tab");
-    expect(mockUseAuth.register).toBeCalled();
+
+    // assertions
+    expect(mockUseAuth.register).toBeCalledTimes(1);
     expect(error.exists()).toBeTruthy();
-    expect(error.text()).toContain("El usuario ya existe.");
+    expect(error.text()).toContain("Ese email ya está en uso.");
+
+    // no redirection or saving here
+    expect(mockSetUser).not.toBeCalled();
     expect(mockRouter.push).not.toBeCalled();
+
+    // user gets clean
+    expect(mockCleanUser).toBeCalledTimes(1);
   });
 
   test("should show loader while submitting", async () => {
@@ -128,6 +142,7 @@ describe("<RegisterPage/>", () => {
     expect(loading.text()).toContain("CARGANDO");
 
     mockUseAuth.isLoading.value = false;
+    mockUseAuth.register.mockReturnValueOnce({ email: "email@mail.com", token: "21512521" });
     await wrapper.vm.$nextTick(); // is not enough to change the value of a ref, it must be re-rendered in the component to reflect the new state. vm.$nextTick() does that
     loading = wrapper.find("p.loading"); // and to search *again* for the element
     expect(loading.exists()).toBeFalsy();

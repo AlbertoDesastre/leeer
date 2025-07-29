@@ -60,10 +60,12 @@ import { useRouter } from "vue-router";
 import { NForm, NFormItem, NInput, NButton, NAvatar, NAlert } from "naive-ui";
 import type { FormInst, FormRules } from "naive-ui";
 
+import { useUserStore } from "../store/user.store";
 import { useAuth } from "../composables/useAuth";
 import fallback_icon from "../../../../imgs/gato-detective.png";
 import personas_escribiendo from "../../../../imgs/personas-escribiendo.png";
 
+const userStore = useUserStore();
 let { login, isLoading, error } = useAuth();
 
 const formRef = ref<FormInst | null>(null);
@@ -92,11 +94,16 @@ async function handleSubmit() {
   });
 
   if (isFormValid) {
-    const result = await login({ email: form.value.email, password: form.value.password });
+    const userData = await login({ email: form.value.email, password: form.value.password });
+
     // si result === null significa que hubo un error. Esto lo actualiza useAuth() solo
-    if (result !== null) {
-      router.push({ name: "home" });
+    if (userData === null) {
+      userStore.cleanUser();
+      return;
     }
+
+    userStore.setUser(userData);
+    router.push({ name: "home" });
   }
 }
 </script>

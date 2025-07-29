@@ -1,14 +1,11 @@
 import { ref } from "vue";
 import type { ApiError } from "../../common/types";
+import type { BasicUser } from "../types";
 
+// TODO: Eliminar email de la response de API y del Front.
 interface LoginDTO {
   email: string;
   password: string;
-}
-
-interface LoginResponse {
-  email: string;
-  token: string;
 }
 
 interface RegisterDTO {
@@ -54,7 +51,7 @@ export function useAuth() {
 
         return null;
       } else {
-        return data as LoginResponse;
+        return data as BasicUser;
       }
     } catch (err: any) {
       // Ejemplos que van al catch:

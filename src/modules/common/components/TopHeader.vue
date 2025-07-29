@@ -1,6 +1,6 @@
 <template>
   <section class="header-wrapper">
-    <header>
+    <header v-if="userStore.noUser">
       <div>
         <RouterLink :to="{ name: 'login' }">Iniciar sesión</RouterLink>
         <RouterLink :to="{ name: 'register' }">Registrarse</RouterLink>
@@ -38,10 +38,12 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
 import { useRouter, useRoute } from "vue-router";
+import { useUserStore } from "../../auth/store/user.store";
 
 const router = useRouter();
 const route = useRoute();
 const term = ref("");
+const userStore = useUserStore();
 
 // Oculta el botón de explorar si estamos en el escritorio
 const isInDeskPage = computed(() => route.name !== "desk");

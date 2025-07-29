@@ -1,7 +1,8 @@
 <template>
   <section class="home-page">
     <div class="home-banner-wrapper">
-      <h1>¡Bienvenido a leeer!</h1>
+      <h1 v-if="useUser.noUser">¡Bienvenido a leeer !</h1>
+      <h1 v-else>¡Hola de nuevo, {{ useUser.user.email }}</h1>
       <img class="home-banner" src="../../../../imgs/gato-encima-de-libros.png" />
     </div>
 
@@ -15,8 +16,10 @@
 
 <script setup lang="ts">
 import CreationsDisplay from "../../creations/components/CreationsDisplay.vue";
+import { useUserStore } from "../../auth/store/user.store";
 import { useCreations } from "../../creations/composables/useCreations";
 
+const useUser = useUserStore();
 const { getCreations } = useCreations();
 const authorNickname = "MaryShelley";
 const creations = await getCreations({ limit: 10, offset: 0 });
