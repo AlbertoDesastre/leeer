@@ -1,13 +1,18 @@
 <template>
   <section class="creation-page">
     <!-- Si no compruebo que la creation existe tira error. Esto es porque cuando llega aquí todavía tiene que cargar la creation, y nada más montar el componente se encuentra en undefined -->
+    <div v-if="!creation" class="loading-state">Cargando...</div>
+
     <CreationDetails
       v-if="creation"
       :creation="creation"
       :is-author="false"
       :display-co-authors="true"
+      :on-toggle-modal="onToggleModal"
     />
-    <div v-else class="loading-state">Cargando...</div>
+
+    <CollaborationModal v-if="toggleModal" :on-toggle-modal="onToggleModal" />
+
     <!-- DESCRIPCIÓN -->
     <div class="description-and-parts-wrapper">
       <section class="description-container">
@@ -37,6 +42,7 @@ import { useParts, type ColumnData, type PartWithCollab } from "../composables/u
 
 import CreationDetails from "../components/CreationDetails.vue";
 import PartsTable from "../components/PartsTable.vue";
+import CollaborationModal from "../../collaborations/components/CollaborationModal.vue";
 
 const { getCreationsById } = useCreations();
 const { getPartsOf, formatPartsForTableColumns } = useParts();
@@ -44,6 +50,11 @@ const { getPartsOf, formatPartsForTableColumns } = useParts();
 const route = useRoute();
 const creation = ref();
 const parts = ref<ColumnData[]>([]);
+const toggleModal = ref(false);
+
+function onToggleModal() {
+  toggleModal.value = !toggleModal.value;
+}
 
 onMounted(async () => {
   // Selecciono la creation
