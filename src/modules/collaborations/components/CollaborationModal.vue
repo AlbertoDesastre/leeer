@@ -26,7 +26,7 @@
     </template>
 
     <!-- Mensaje de error -->
-    <n-alert v-if="error" type="error" :title="error.error" class="error-alert">
+    <n-alert v-if="error.message" type="error" :title="error.error" class="error-alert">
       {{ error.message }}
     </n-alert>
 
@@ -47,7 +47,7 @@
 </template>
 
 <script setup lang="ts">
-import { NCard, NRadioGroup, NRadioButton, NSpace, NButton } from "naive-ui";
+import { NCard, NRadioGroup, NRadioButton, NSpace, NAlert, NButton } from "naive-ui";
 import { ref } from "vue";
 
 import { useCollaborations } from "../composables/useCollaboration";
