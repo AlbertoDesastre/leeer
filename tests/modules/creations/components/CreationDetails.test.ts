@@ -27,6 +27,7 @@ describe("<CreationDetails/>", () => {
       creation, // este creation tiene thumbnail = ""
       isAuthor: false,
       displayCoAuthors: false,
+      onToggleModal: () => {},
     },
   });
   test("notes about testing: events, effects, simulates emitts vue machine", async () => {
@@ -91,6 +92,7 @@ describe("<CreationDetails/>", () => {
         creation: creationWithoutUser,
         isAuthor: false,
         displayCoAuthors: false,
+        onToggleModal: () => {},
       },
     });
 
@@ -102,6 +104,7 @@ describe("<CreationDetails/>", () => {
     const wrapper = mount(CreationDetails, {
       props: {
         creation,
+        onToggleModal: () => {},
       },
     });
 
@@ -129,6 +132,7 @@ describe("<CreationDetails/>", () => {
         creation: { ...creation, thumbnail },
         isAuthor: false,
         displayCoAuthors: false,
+        onToggleModal: () => {},
       },
     });
 
@@ -148,6 +152,7 @@ describe("<CreationDetails/>", () => {
         creation, // este creation tiene thumbnail = ""
         isAuthor: false,
         displayCoAuthors: true,
+        onToggleModal: () => {},
       },
     });
 
@@ -170,6 +175,7 @@ describe("<CreationDetails/>", () => {
         creation,
         isAuthor: true, // autor
         displayCoAuthors: false,
+        onToggleModal: () => {},
       },
     });
 
