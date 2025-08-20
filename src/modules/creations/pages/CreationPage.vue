@@ -9,9 +9,12 @@
       :is-author="false"
       :display-co-authors="true"
       :on-toggle-modal="onToggleModal"
+      class="details"
     />
 
-    <CollaborationModal v-if="toggleModal" :on-toggle-modal="onToggleModal" />
+    <section v-if="toggleModal" class="modal-layout">
+      <CollaborationModal class="modal-center" :on-toggle-modal="onToggleModal" />
+    </section>
 
     <!-- DESCRIPCIÓN -->
     <div class="description-and-parts-wrapper">
@@ -91,9 +94,29 @@ const pagination = { pageSize: 10 };
 .creation-page {
   display: grid;
   grid-template-columns: 1fr 2fr;
-  gap: 16px;
-  margin: 32px 80px;
   min-height: 600px;
+}
+
+.details,
+.description-and-parts-wrapper {
+  margin-top: 32px;
+}
+
+.description-and-parts-wrapper {
+  margin-right: 60px;
+}
+
+.modal-layout {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgb(30, 30, 30, 0.3);
+  z-index: 1000;
+}
+
+.modal-center {
+  top: 0;
+  left: 0;
 }
 
 .description-and-parts-wrapper p {

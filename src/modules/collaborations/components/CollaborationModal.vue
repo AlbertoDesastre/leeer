@@ -14,7 +14,7 @@
     <template #footer>
       <n-space justify="center" align="center">
         <h4>¿Qué tipo de historia te interesa incluir ?</h4>
-        <n-radio-group v-model:value="value" name="collaboration-options">
+        <n-radio-group v-model:value="collab" name="collaboration-options">
           <n-radio-button
             v-for="collaboration in collaborations"
             :key="collaboration.value"
@@ -25,10 +25,22 @@
       </n-space>
     </template>
 
+    <!-- Mensaje de error -->
+    <n-alert v-if="error" type="error" :title="error.error" class="error-alert">
+      {{ error.message }}
+    </n-alert>
+
+    <!-- Mensaje de éxito -->
+    <n-alert v-if="success" type="success" title="¡Solicitud enviada!" class="success-alert">
+      Tu solicitud de colaboración ha sido enviada correctamente.
+    </n-alert>
+
     <template #action>
       <n-space class="options" justify="space-between" align="center">
         <button class="close-button" @click="onToggleModal">Cerrar</button>
-        <n-button color="#5d81a3" @click="onSend"> Enviar solicitud </n-button>
+        <n-button color="#5d81a3" :disabled="!collab || success" @click="handleSubmit">
+          Enviar solicitud
+        </n-button>
       </n-space>
     </template>
   </n-card>
@@ -38,23 +50,52 @@
 import { NCard, NRadioGroup, NRadioButton, NSpace, NButton } from "naive-ui";
 import { ref } from "vue";
 
+import { useCollaborations } from "../composables/useCollaboration";
+import { useRoute } from "vue-router";
+import { COLLABORATION_TYPE, type CollaborationType } from "../types";
+
+// props
 const props = defineProps<{ onToggleModal: () => void }>();
 function onToggleModal() {
   props.onToggleModal();
 }
 
+// inputs del componente y valores
 const collaborations = [
-  { value: "Fanfiction", label: "Fanfiction" },
-  { value: "Canon", label: "Canon" },
-  { value: "Spinoff", label: "Spinoff" },
+  { value: COLLABORATION_TYPE.FANFICTION, label: COLLABORATION_TYPE.FANFICTION },
+  { value: COLLABORATION_TYPE.CANON, label: COLLABORATION_TYPE.CANON },
+  { value: COLLABORATION_TYPE.SPINOFF, label: COLLABORATION_TYPE.SPINOFF },
 ];
-const value = ref(null); // Este será el valor actual del radio button. Solo se puede elegir uno a la vez, obviamente
+const collab = ref<CollaborationType | "">(""); // Este será el valor actual del radio button. Solo se puede elegir uno a la vez, obviamente
 
-const emit = defineEmits(["toggle-modal", "send-collaboration"]);
+// composable de colaboraciones
+const route = useRoute();
+const { error, success, sendCollaboration } = useCollaborations();
 
-function onSend() {
-  emit("send-collaboration");
-}
+const handleSubmit = async () => {
+  const id = route.params.id as string;
+
+  // no escogió ningún tipo de colaboración
+  if (!collab.value) {
+    error.value = {
+      message: "Escoge algún tipo de colaboración antes de enviar la solicitud.",
+      error: "Error de validación",
+      statusCode: 400,
+    };
+    return;
+  }
+
+  const result = await sendCollaboration({ creation_id: id, collaboration: collab.value });
+
+  // si todo salió bien mandamos a cerrar el modal
+  if (result) setTimeout(() => onToggleModal(), 3000);
+};
+
+// TODOS:
+// mandar el error y el isLoading al padre para que sepa manejar esos estados
+// detectar y mandar mensaje de éxito para que el usuario sepa el feedback
+// si el usuario ya tiene una colaboración mandada no dejarlo mandar más solicitudes
+// empezar a hacer los test unitarios & de integración
 </script>
 
 <style scoped>
