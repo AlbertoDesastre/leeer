@@ -1,13 +1,21 @@
 <template>
   <section class="creation-page">
     <!-- Si no compruebo que la creation existe tira error. Esto es porque cuando llega aquí todavía tiene que cargar la creation, y nada más montar el componente se encuentra en undefined -->
+    <div v-if="!creation" class="loading-state">Cargando...</div>
+
     <CreationDetails
       v-if="creation"
       :creation="creation"
       :is-author="false"
       :display-co-authors="true"
+      :on-toggle-modal="onToggleModal"
+      class="details"
     />
-    <div v-else class="loading-state">Cargando...</div>
+
+    <section v-if="toggleModal" class="modal-layout">
+      <CollaborationModal class="modal-center" :on-toggle-modal="onToggleModal" />
+    </section>
+
     <!-- DESCRIPCIÓN -->
     <div class="description-and-parts-wrapper">
       <section class="description-container">
@@ -37,6 +45,7 @@ import { useParts, type ColumnData, type PartWithCollab } from "../composables/u
 
 import CreationDetails from "../components/CreationDetails.vue";
 import PartsTable from "../components/PartsTable.vue";
+import CollaborationModal from "../../collaborations/components/CollaborationModal.vue";
 
 const { getCreationsById } = useCreations();
 const { getPartsOf, formatPartsForTableColumns } = useParts();
@@ -44,6 +53,11 @@ const { getPartsOf, formatPartsForTableColumns } = useParts();
 const route = useRoute();
 const creation = ref();
 const parts = ref<ColumnData[]>([]);
+const toggleModal = ref(false);
+
+function onToggleModal() {
+  toggleModal.value = !toggleModal.value;
+}
 
 onMounted(async () => {
   // Selecciono la creation
@@ -80,9 +94,29 @@ const pagination = { pageSize: 10 };
 .creation-page {
   display: grid;
   grid-template-columns: 1fr 2fr;
-  gap: 16px;
-  margin: 32px 80px;
   min-height: 600px;
+}
+
+.details,
+.description-and-parts-wrapper {
+  margin-top: 32px;
+}
+
+.description-and-parts-wrapper {
+  margin-right: 60px;
+}
+
+.modal-layout {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgb(30, 30, 30, 0.3);
+  z-index: 1000;
+}
+
+.modal-center {
+  top: 0;
+  left: 0;
 }
 
 .description-and-parts-wrapper p {

@@ -24,7 +24,7 @@
       <!-- Botón para colaborar -->
       <template v-if="!isAuthor" #action>
         <n-space justify="center">
-          <n-button round color="#5d81a3"> Colaborar en esta historia </n-button>
+          <n-button round color="#5d81a3" @click="onToggleModal"> Colaborar en esta historia </n-button>
         </n-space>
       </template>
     </n-card>
@@ -43,8 +43,8 @@ const props = defineProps<{
   creation: Creation;
   isAuthor?: boolean;
   displayCoAuthors?: boolean;
+  onToggleModal: () => void;
 }>();
-
 const coauthorImages = [
   "../../../../imgs/gato-escritor.png",
   "../../../../imgs/gato-escritor.png",

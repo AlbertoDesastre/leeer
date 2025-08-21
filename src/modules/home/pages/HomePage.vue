@@ -10,7 +10,7 @@
     <CreationsDisplay v-if="creations" :creations="creations" />
 
     <h2>Lo último de: @{{ authorNickname }}</h2>
-    <CreationsDisplay v-if="maryShelleyCreations" :creations="maryShelleyCreations" />
+    <CreationsDisplay v-if="octaviaButlerCreations" :creations="octaviaButlerCreations" />
   </section>
 </template>
 
@@ -21,10 +21,11 @@ import { useCreations } from "../../creations/composables/useCreations";
 
 const useUser = useUserStore();
 const { getCreations } = useCreations();
-const authorNickname = "MaryShelley";
+const authorNickname = "OctaviaButler";
 const creations = await getCreations({ limit: 10, offset: 0 });
+
 /* Hago una segunda llamada porque puede que en la lista de creations no vengan muchas obras de la autora, así que le dedico una */
-const maryShelleyCreations = await getCreations({ authorNickname, limit: 10, offset: 0 });
+const octaviaButlerCreations = await getCreations({ authorNickname, limit: 10, offset: 0 });
 </script>
 
 <style scoped>
