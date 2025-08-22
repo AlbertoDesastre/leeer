@@ -32,6 +32,16 @@ function getCollaborationTypeBody(
   return JSON.stringify(object);
 }
 
+const isValidCollaboration = (term: string) => {
+  const types: string[] = [
+    COLLABORATION_TYPE.CANON,
+    COLLABORATION_TYPE.FANFICTION,
+    COLLABORATION_TYPE.SPINOFF,
+  ];
+
+  return types.includes(term);
+};
+
 export function useCollaborations() {
   const error = ref<ApiError>({ message: "", error: "", statusCode: 0 });
   const success = ref(false);
@@ -50,9 +60,8 @@ export function useCollaborations() {
     clearError();
     clearSuccess();
 
-    const token = store.user.token;
     // validaciones
-    if (!collaboration) {
+    if (!isValidCollaboration(collaboration) || !collaboration) {
       error.value = {
         message: "Debes escoger algún tipo de colaboración antes de enviar una petición al autor.",
         error: "Error de validación",
@@ -60,6 +69,8 @@ export function useCollaborations() {
       };
       return null;
     }
+
+    const token = store.user.token;
 
     if (!token) {
       error.value = {

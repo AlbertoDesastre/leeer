@@ -1,5 +1,6 @@
 import { vi } from "vitest";
 import { ref } from "vue";
+import type { BasicUser } from "../../../src/modules/auth/types";
 
 export const fakeUser = {
   email: "isaac.asimov@ficcion.com",
@@ -17,9 +18,11 @@ export const mockUseAuth = {
   isLoading: ref(false),
 };
 
+export const mockUser = ref<BasicUser>({ email: "", token: "" });
 export const mockSetUser = vi.fn();
 export const mockCleanUser = vi.fn();
 export const mockUseUserStore = {
+  user: mockUser,
   setUser: mockSetUser,
   cleanUser: mockCleanUser,
   noUser: false,
