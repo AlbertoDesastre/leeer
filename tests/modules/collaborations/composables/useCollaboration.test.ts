@@ -117,7 +117,7 @@ describe("useCollaboration (composable)", () => {
   test("should set isLoading true while request is in progress and set it false after", async () => {
     store.user.token = "VALID_TOKEN";
 
-    (window as any).fetch = vi.fn(async () => ({ json: async () => {} }));
+    (window as any).fetch = vi.fn(async () => ({ json: async () => "" }));
 
     // "await" when invoking "sendCollaboration" because I want to test that middle state where the function hasn't finished
     const pendingPromise = sendCollaboration({ creation_id: "1", collaboration: "Fanfiction" });

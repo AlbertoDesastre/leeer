@@ -38,7 +38,7 @@
     <template #action>
       <n-space class="options" justify="space-between" align="center">
         <button class="close-button" @click="onToggleModal">Cerrar</button>
-        <n-button color="#5d81a3" :disabled="!collab || success" @click="handleSubmit">
+        <n-button class="submit" color="#5d81a3" :disabled="!collab || success" @click="handleSubmit">
           Enviar solicitud
         </n-button>
       </n-space>
@@ -93,9 +93,6 @@ const handleSubmit = async () => {
 
 // TODOS:
 // mandar el error y el isLoading al padre para que sepa manejar esos estados
-// detectar y mandar mensaje de éxito para que el usuario sepa el feedback
-// si el usuario ya tiene una colaboración mandada no dejarlo mandar más solicitudes
-// empezar a hacer los test unitarios & de integración
 </script>
 
 <style scoped>
