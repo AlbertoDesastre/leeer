@@ -8,7 +8,7 @@ import type {
   GetCreationCollaborationResponseDto,
 } from "../types";
 
-function getCollaborationTypeBody(
+export function getCollaborationTypeBody(
   type: (typeof COLLABORATION_TYPE)[keyof typeof COLLABORATION_TYPE]
 ): string {
   let object: SendCollaborationRequestBody = {
@@ -81,6 +81,7 @@ export function useCollaborations() {
       return null;
     }
 
+    // ocurre la magia
     try {
       isLoading.value = true;
 
