@@ -34,6 +34,9 @@ build
 .env.production.local
 .env.local
 
+# Skills
+.agents*
+
 # Tests
 coverage
 .nyc_output
