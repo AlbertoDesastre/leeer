@@ -3,12 +3,12 @@
   "private": true,
   "scripts": {
     "dev:frontend": "pnpm --filter @leeer/frontend dev",
-    "dev:backend": "pnpm --filter @leeer/backend start:dev",
+    "dev:api": "pnpm --filter @leeer/api start:dev",
     "build:frontend": "pnpm --filter @leeer/frontend build",
-    "build:backend": "pnpm --filter @leeer/backend build",
+    "build:api": "pnpm --filter @leeer/api build",
     "test:frontend": "pnpm --filter @leeer/frontend test",
-    "test:backend": "pnpm --filter @leeer/backend test",
-    "lint:backend": "pnpm --filter @leeer/backend lint"
+    "test:api": "pnpm --filter @leeer/api test",
+    "lint:api": "pnpm --filter @leeer/api lint"
   },
   "engines": {
     "node": ">=18"
@@ -20,5 +20,8 @@
       "@nestjs/core",
       "vue-demi"
     ]
+  },
+  "dependencies": {
+    "@juliusbrussee/caveman-code": "^0.65.2"
   }
 }
