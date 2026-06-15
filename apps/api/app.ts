@@ -1,18 +1,12 @@
 import { envConfig } from "./src/config/envs";
-import { server } from "./src/infrastructure/server";
-import { authRoutes } from "./src/modules/auth/auth.routes";
-import { Router } from "express";
+import { Server } from "./src/presentation/Server.ts"
+import { AppRoutes } from "./src/presentation/routes.ts"
 
 const main = () => {
-  const router = Router();
-  const serverInstance = server(
-    {
-      port: Number(envConfig.PORT),
-    },
-    authRoutes(router),
-  );
-
-  serverInstance.start();
+    new Server().start({
+        port: envConfig.PORT,
+        routes: AppRoutes.routes
+    });
 };
 
 (() => main())();
