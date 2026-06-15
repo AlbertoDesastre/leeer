@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "dev:frontend": "pnpm --filter @leeer/frontend dev",
-    "dev:api": "pnpm --filter @leeer/api start:dev",
+    "dev:api": "pnpm --filter @leeer/api dev",
     "build:frontend": "pnpm --filter @leeer/frontend build",
     "build:api": "pnpm --filter @leeer/api build",
     "test:frontend": "pnpm --filter @leeer/frontend test",
