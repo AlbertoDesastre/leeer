@@ -1,0 +1,27 @@
+{
+  "name": "leeer",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "pnpm@11.22.0",
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "scripts": {
+    "install:all": "pnpm install",
+    "install:web": "pnpm --filter @leeer/web... install",
+    "install:mobile": "pnpm --filter @leeer/mobile... install",
+    "install:back": "pnpm --filter @leeer/back... install",
+    "pkg:add:web": "pnpm --filter @leeer/web add",
+    "pkg:add:mobile": "pnpm --filter @leeer/mobile add",
+    "pkg:add:back": "pnpm --filter @leeer/back add",
+    "dev": "pnpm -r --parallel --filter './apps/*' dev",
+    "dev:web": "pnpm --filter @leeer/web dev",
+    "dev:mobile": "pnpm --filter @leeer/mobile dev",
+    "dev:back": "pnpm --filter @leeer/back dev",
+    "build": "pnpm -r --if-present build",
+    "lint": "pnpm -r --if-present lint",
+    "typecheck": "pnpm -r --if-present typecheck",
+    "test": "pnpm -r --if-present test",
+    "check": "pnpm lint && pnpm typecheck && pnpm test"
+  }
+}

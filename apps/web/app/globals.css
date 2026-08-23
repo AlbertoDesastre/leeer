@@ -1,0 +1,15 @@
+@import "tailwindcss";
+
+:root {
+  color-scheme: light;
+  --paper: #f4f0e7;
+  --ink: #1e1b18;
+  --accent: #a9362c;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: ui-serif, Georgia, serif;
+}

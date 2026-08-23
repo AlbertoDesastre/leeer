@@ -1,0 +1,25 @@
+packages:
+  - "apps/*"
+  - "packages/*"
+
+# One flat node_modules at the workspace root. Dependencies still belong to
+# the package.json that declares them; pnpm only centralizes the physical tree.
+nodeLinker: hoisted
+saveExact: true
+linkWorkspacePackages: true
+preferWorkspacePackages: true
+
+# Versions used by more than one workspace. Each app still declares
+# its own dependencies with "catalog:" in its own package.json.
+catalog:
+  react: 19.2.3
+  typescript: 6.0.3
+  vitest: 4.1.11
+  zod: 4.4.3
+  "@types/node": 24.13.2
+  "@types/react": 19.2.2
+
+allowBuilds:
+  esbuild: set this to true or false
+  unrs-resolver: set this to true or false
+  workerd: set this to true or false

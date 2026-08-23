@@ -1,0 +1,16 @@
+node_modules/
+.pnpm-store/
+.next/
+.open-next/
+dist/
+coverage/
+.expo/
+web-build/
+.env
+.env.*
+!.env.example
+*.local
+.DS_Store
+supabase/.temp/
+supabase/.branches/
+docs/work/*

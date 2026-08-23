@@ -1,0 +1,39 @@
+{
+  "name": "@leeer/mobile",
+  "version": "0.1.0",
+  "private": true,
+  "main": "expo-router/entry",
+  "scripts": {
+    "deps:install": "pnpm --filter @leeer/mobile... install",
+    "dev": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@leeer/contracts": "workspace:*",
+    "expo": "~57.0.9",
+    "expo-constants": "~57.0.8",
+    "expo-linking": "~57.0.4",
+    "expo-router": "~57.0.9",
+    "expo-status-bar": "~57.0.1",
+    "nativewind": "4.2.6",
+    "react": "catalog:",
+    "react-native": "0.86.2",
+    "react-native-reanimated": "4.5.1",
+    "react-native-safe-area-context": "~5.7.0",
+    "react-native-screens": "4.26.0",
+    "zod": "catalog:",
+    "react-native-worklets": "0.10.1"
+  },
+  "devDependencies": {
+    "@types/react": "catalog:",
+    "babel-preset-expo": "57.0.7",
+    "tailwindcss": "3.4.19",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  }
+}
