@@ -1,5 +1,5 @@
 import { Router } from "express";
-import type { StoriesController } from "../controllers/stories.controller.js";
+import type { StoriesController } from "./controllers/stories.controller.js";
 
 export function createStoriesRouter(controller: StoriesController) {
   const router = Router();

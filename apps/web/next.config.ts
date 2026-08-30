@@ -1,7 +1,5 @@
 import type { NextConfig } from "next";
 
-const nextConfig: NextConfig = {
-  transpilePackages: ["@leeer/contracts"],
-};
+const nextConfig: NextConfig = {};
 
 export default nextConfig;

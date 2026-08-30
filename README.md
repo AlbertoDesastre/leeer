@@ -1,11 +1,10 @@
 # leeer
 
-Monorepo de leeer con tres aplicaciones y contratos compartidos:
+Monorepo de leeer con tres aplicaciones:
 
 - `apps/web`: web pública y aplicación web con Next.js.
 - `apps/mobile`: aplicación iOS/Android con Expo + React Native.
 - `apps/back`: API Node.js + Express para lógica de servidor y acceso desacoplado a datos.
-- `packages/contracts`: contratos Zod compartidos entre clientes y API.
 - `supabase`: configuración y migraciones de Supabase, siempre en la raíz.
 - `docs`: documentación del producto y arquitectura.
 
@@ -65,7 +64,7 @@ pnpm run check
 
 ## API
 
-El backend expone `/api/v1/*`. Los clientes no deben depender de tablas, queries o detalles internos de Supabase para operaciones de dominio. La API usa puertos de repositorio para que el proveedor de base de datos pueda cambiar sin reescribir los casos de uso.
+El backend expone `/api/v1/*`. Los clientes no deben depender de tablas, queries o detalles internos de Supabase para operaciones de dominio. El acceso a datos vive en los services de cada feature.
 
 Ejemplos incluidos:
 

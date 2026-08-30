@@ -9,7 +9,6 @@ Antes de leer código, clasifica la tarea:
 - **Web/SEO/landing/app web** -> `apps/web`.
 - **iOS/Android/Expo/React Native** -> `apps/mobile`.
 - **API, operaciones privilegiadas, reglas de servidor, integraciones o persistencia** -> `apps/back`.
-- **Contrato HTTP usado por más de una app** -> `packages/contracts` y solo las apps afectadas.
 - **Migraciones/configuración local de BBDD** -> `supabase`.
 - **Requisitos/documentación** -> `docs`.
 
@@ -25,7 +24,6 @@ Secuencia recomendada:
 2. Lee el `package.json` de la app objetivo si necesitas conocer scripts o dependencias.
 3. Lee la ruta/feature directamente relacionada con la petición.
 4. Sigue únicamente imports o tests necesarios para esa modificación.
-5. Abre contratos compartidos solo cuando la feature realmente los consuma.
 
 No hagas escaneos recursivos del repositorio (`find .`, `tree` completo, `grep -R` global, volcado de todos los archivos) como forma de "ganar contexto". No leas `apps/back` para una tarea puramente visual de `apps/web`; no leas `apps/web` para un endpoint aislado del backend; no inspecciones `supabase` salvo que la tarea afecte persistencia o contratos de datos.
 
@@ -73,7 +71,6 @@ Nunca uses credenciales de producción para pruebas.
 apps/web     -> cliente Next.js
 apps/mobile  -> cliente Expo/React Native
 apps/back    -> API Express
-packages/contracts -> contratos HTTP compartidos
 supabase     -> persistencia/migraciones locales
 ```
 
@@ -88,6 +85,7 @@ Tanto `apps/web` como `apps/mobile` siguen esta convención:
 ```text
 src/features/{feature}/
 ├── components/
+├── dtos/
 ├── hooks/
 ├── pages/
 ├── services/
@@ -97,6 +95,7 @@ src/features/{feature}/
 No crees carpetas vacías por cumplir la forma; crea solo las necesarias.
 
 - `components/`: UI de la feature.
+- `dtos/`: schemas Zod y tipos inferidos de las respuestas/peticiones HTTP que consume el cliente.
 - `hooks/`: coordinación de estado React y efectos.
 - `pages/`: composición de pantalla completa.
 - `services/`: cliente HTTP y transformaciones propias del frontend.
@@ -118,33 +117,23 @@ No crees carpetas vacías por cumplir la forma; crea solo las necesarias.
 
 ## 6. Backend: Express + screaming architecture
 
-`apps/back` se organiza **por feature**, siguiendo la referencia de Fero pero separando explícitamente dominio, casos de uso, infraestructura y presentación.
+`apps/back` se organiza **por feature**. Cada feature agrupa controllers, services, DTOs y su router.
 
 ```text
 src/features/{feature}/
-├── domain/
-│   ├── entities/
-│   └── repositories/
-├── application/
-│   └── use-cases/
-├── infrastructure/
-│   └── repositories/
-├── presentation/
-│   ├── controllers/
-│   ├── routes/
-│   └── schemas/
+├── controllers/
+├── dtos/
+├── services/
+├── routes.ts
 └── index.ts
 ```
 
 Reglas:
 
-- La estructura debe "gritar" `stories`, `characters`, `beta-testing`, etc., no `controllers/`, `services/` globales.
-- Controllers: traducen HTTP a un caso de uso y construyen la respuesta HTTP.
-- Schemas: Zod en el boundary HTTP.
-- Use cases: reglas/orquestación de aplicación; no importan Express ni Supabase.
-- Domain: entidades, invariantes y puertos/interfaces; no importa infraestructura.
-- Infrastructure: implementa repositorios y proveedores externos.
-- Un repositorio de Supabase será una implementación de una interfaz, nunca la interfaz misma.
+- La estructura debe "gritar" `stories`, `characters`, `beta-testing`, etc., no `controllers/` o `services/` globales.
+- Controllers: traducen HTTP a servicio y construyen la respuesta HTTP.
+- Services: reglas de negocio, orquestación y acceso a datos (repositorios, Supabase, etc.).
+- DTOs: schemas Zod y tipos inferidos del boundary HTTP; schema y tipo viven en el mismo archivo.
 - No accedas a Supabase directamente desde controllers.
 - No introduzcas un ORM o framework adicional sin una necesidad concreta.
 
@@ -152,7 +141,6 @@ Reglas:
 
 - Prefijo: `/api/v1` para dominio; `/api/health` para salud.
 - JSON por defecto.
-- Contratos compartidos en `@leeer/contracts` cuando los consume más de una app.
 - Errores esperables deben tener forma estable: `{ "error": { "code": string, "message": string } }`.
 - No expongas errores internos, SQL, stack traces ni credenciales al cliente.
 
@@ -160,19 +148,18 @@ Reglas:
 
 Para facilitar una futura salida de Supabase:
 
-- Los casos de uso dependen de puertos de repositorio.
-- Las implementaciones concretas viven en `infrastructure`.
-- Los modelos de dominio no son filas de BBDD.
-- No propagues tipos generados de Supabase hasta frontend o domain.
+- El acceso a datos vive en `services/`, no en controllers.
+- Los DTOs no son filas de BBDD; transforma en el servicio antes de responder.
+- No propagues tipos generados de Supabase hasta frontend.
 - Las migraciones de la implementación actual viven en `/supabase`.
-- Cambiar Supabase por otra BBDD debería afectar principalmente infraestructura, wiring y migraciones, no controllers/clientes/casos de uso.
+- Cambiar Supabase por otra BBDD debería afectar principalmente servicios y migraciones, no controllers ni clientes.
 
 ## 8. Testing
 
 Todo comportamiento nuevo o modificado requiere tests salvo cambios puramente documentales/configuración sin runtime.
 
 - Runner base: Vitest.
-- Backend: testea casos de uso sin levantar Express cuando sea posible; testea rutas solo para comportamiento HTTP relevante.
+- Backend: testea services sin levantar Express cuando sea posible; testea rutas solo para comportamiento HTTP relevante.
 - Frontend: prioriza tests de services, validaciones, hooks y comportamiento visible importante.
 - Tests cerca de la feature o en una carpeta `tests/` propia de la app; mantén una convención consistente dentro de cada app.
 - No hagas tests que dependan de Supabase remoto.
@@ -185,7 +172,7 @@ Antes de cerrar una tarea ejecuta, para el workspace afectado, como mínimo `typ
 - Evita `any`.
 - `unknown` está permitido únicamente en boundaries y debe estrecharse/validarse antes de propagarse.
 - Valida con Zod entradas HTTP, variables de entorno y datos externos no confiables.
-- No dupliques manualmente un tipo cuando puede inferirse de un schema compartido.
+- No dupliques manualmente un tipo cuando puede inferirse de un schema Zod.
 
 ## 10. Variables de entorno y secretos
 

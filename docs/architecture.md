@@ -2,7 +2,7 @@
 
 ## Objetivo
 
-Leeer separa sus clientes de la lógica de servidor y de la tecnología de persistencia. La web y el móvil consumen contratos HTTP; la API Express concentra los casos que no deben resolverse directamente desde cliente y abstrae el acceso a datos mediante repositorios.
+Leeer separa sus clientes de la lógica de servidor y de la tecnología de persistencia. La web y el móvil consumen la API HTTP; Express concentra los casos que no deben resolverse directamente desde cliente y abstrae el acceso a datos.
 
 ## Estructura
 
@@ -12,8 +12,6 @@ leeer/
 │   ├── web/       # Next.js
 │   ├── mobile/    # Expo / React Native
 │   └── back/      # Node.js / Express
-├── packages/
-│   └── contracts/ # Zod + tipos de contratos HTTP compartidos
 ├── supabase/      # configuración, migraciones y seed local
 ├── docs/
 ├── AGENTS.md
@@ -28,6 +26,7 @@ Los dos clientes siguen organización por feature. Los archivos de ruta son delg
 ```text
 features/{feature}/
 ├── components/
+├── dtos/
 ├── hooks/
 ├── pages/
 ├── services/
@@ -36,38 +35,39 @@ features/{feature}/
 
 `services/` contiene acceso a API y transformaciones propias del cliente; no debe contener reglas de negocio que tengan que ser consistentes entre plataformas o usuarios.
 
+`dtos/` define los schemas Zod y tipos inferidos de las respuestas (y peticiones) que consume ese cliente. Cada app mantiene los suyos; no hay paquete compartido.
+
 ## Backend: screaming architecture
 
-La API se organiza por capacidades del producto, no por carpetas globales de controllers/services.
+La API se organiza por capacidades del producto, no por carpetas globales de controllers o services.
 
 ```text
 features/stories/
-├── domain/
-│   ├── entities/
-│   └── repositories/
-├── application/
-│   └── use-cases/
-├── infrastructure/
-│   └── repositories/
-├── presentation/
-│   ├── controllers/
-│   ├── routes/
-│   └── schemas/
+├── controllers/
+├── dtos/
+├── services/
+├── routes.ts
 └── index.ts
 ```
 
-La dirección de dependencias es:
+- `controllers/`: traducen HTTP a llamadas de servicio y construyen la respuesta.
+- `services/`: reglas de negocio, orquestación y acceso a datos (repositorios, Supabase, etc.).
+- `dtos/`: schemas Zod y tipos inferidos del boundary HTTP de esa feature.
+- `routes.ts`: define el router Express de la feature.
+- `index.ts`: ensambla dependencias y exporta el router.
 
-```text
-presentation -> application -> domain
-infrastructure -----------> domain
+La estructura debe "gritar" `stories`, `characters`, `beta-testing`, etc. Los controllers no acceden a Supabase directamente; el acceso a datos vive en `services/`.
+
+## DTOs
+
+Un DTO es la forma estable de un recurso en el boundary HTTP. Con Zod, el schema es la fuente de verdad y el tipo se infiere con `z.infer`:
+
+```typescript
+export const storyDtoSchema = z.object({ ... });
+export type StoryDto = z.infer<typeof storyDtoSchema>;
 ```
 
-`application` depende de interfaces de repositorio del dominio, nunca de Supabase. La implementación de Supabase, PostgreSQL u otra BBDD vive en `infrastructure/`.
-
-## Contratos compartidos
-
-`packages/contracts` contiene schemas Zod que constituyen el contrato entre API y clientes. No contiene lógica de UI, acceso a base de datos ni casos de uso.
+No se separan carpetas de "tipos" y "validators" como en NestJS: eso duplica definiciones. Cada feature del backend tiene su carpeta `dtos/`; los clientes replican solo los DTOs que consumen en su propia feature.
 
 ## Pnpm
 

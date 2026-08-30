@@ -15,7 +15,6 @@
     "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy"
   },
   "dependencies": {
-    "@leeer/contracts": "workspace:*",
     "next": "16.3.0",
     "react": "catalog:",
     "react-dom": "19.2.3",

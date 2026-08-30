@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import type { StoryDto } from "@leeer/contracts";
+import type { StoryDto } from "../dtos/story.dto";
 import { listStories } from "../services/stories.service";
 
 export function useStories() {
