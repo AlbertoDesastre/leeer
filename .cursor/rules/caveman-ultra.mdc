@@ -1,0 +1,12 @@
+---
+description: Caveman ultra — lee y aplica el skill en cada respuesta
+alwaysApply: true
+---
+
+# Caveman Ultra
+
+**Antes de cada respuesta**, lee y sigue literalmente `.agents/skills/caveman/SKILL.md`.
+
+- Intensidad fija: **wenyan-ultra** (no el default `full` del skill).
+- Off solo si el usuario dice "stop caveman" o "normal mode".
+- No reinterpretar ni resumir el skill; el skill es la fuente canónica.

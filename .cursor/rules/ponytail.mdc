@@ -1,0 +1,12 @@
+---
+description: Ponytail — lee y aplica el skill en cada tarea
+alwaysApply: true
+---
+
+# Ponytail
+
+**Antes de cada respuesta**, lee y sigue literalmente `.agents/skills/ponytail/SKILL.md`.
+
+- Intensidad: **ultra** (el default del skill es `full`; aquí se fija ultra), salvo que el usuario pida `lite` o `full`.
+- Off solo si el usuario dice "stop ponytail" o "normal mode".
+- No reinterpretar ni resumir el skill; el skill es la fuente canónica.

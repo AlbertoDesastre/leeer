@@ -12,6 +12,7 @@ leeer/
 │   ├── web/       # Next.js
 │   ├── mobile/    # Expo / React Native
 │   └── back/      # Node.js / Express
+├── design-system/leeer/  # MASTER.md: tokens y reglas visuales
 ├── supabase/      # configuración, migraciones y seed local
 ├── docs/
 ├── AGENTS.md
@@ -36,6 +37,10 @@ features/{feature}/
 `services/` contiene acceso a API y transformaciones propias del cliente; no debe contener reglas de negocio que tengan que ser consistentes entre plataformas o usuarios.
 
 `dtos/` define los schemas Zod y tipos inferidos de las respuestas (y peticiones) que consume ese cliente. Cada app mantiene los suyos; no hay paquete compartido.
+
+## Design system
+
+La fuente visual es `design-system/leeer/MASTER.md`. Paleta Claude (papel `#f4f0e7`, tinta `#1e1b18`, acento `#a9362c`) mapeada a tokens semánticos. Web: Tailwind v4 `@theme` en `apps/web/app/globals.css`. Móvil: NativeWind `theme.extend` en `apps/mobile/tailwind.config.js`. Componentes usan utilidades semánticas (`bg-background`, `text-primary`), no hex.
 
 ## Backend: screaming architecture
 

@@ -14,3 +14,5 @@ web-build/
 supabase/.temp/
 supabase/.branches/
 docs/work/*
+.cursor/rules/learn.mdc
+.agents/skills/learn
